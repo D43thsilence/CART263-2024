@@ -92,21 +92,21 @@ function draw() {
 
 
     if (state === `knowledgeTest1`) {
-        robotQuestions()
+        robotTestingQuestions()
         setTimeout(playerAsking, 3000)
 
         nextQuestion()
     }
 
     if (state === `knowledgeTest2`) {
-        robotQuestions()
+        robotTestingQuestions()
         setTimeout(playerAsking, 3000)
 
         nextQuestion()
     }
 
     if (state === `knowledgeTest3`) {
-        robotQuestions()
+        robotTestingQuestions()
         setTimeout(playerAsking, 3000)
 
         nextQuestion()
@@ -148,7 +148,7 @@ function introduction() {
     textSize(32);
     textAlign(CENTER);
     text("say something", width / 2, height / 2);
-
+    // bgMusic.stop();
 }
 
 function playerAnswer() {
@@ -170,22 +170,22 @@ function playerAsking() {
 }
 
 function questions() {
-    if (state = `Question1`) {
+    if (state === `Question1`) {
 
     }
 
-    if (state = `Question2`) {
+    if (state === `Question2`) {
 
     }
 
-    if (state = `Question3`) {
+    if (state === `Question3`) {
 
     }
 }
 
 function answerRecord() {
 
-    if (state = `Question1`) {
+    if (state === `Question1`) {
         if (playerVoiceRec.resultValue == true) {
             background(192, 255, 192);
             answers[0] = playerVoiceRec.resultString
@@ -194,7 +194,7 @@ function answerRecord() {
         }
     }
 
-    if (state = `Question2`) {
+    if (state === `Question2`) {
         if (playerVoiceRec.resultValue == true) {
             background(192, 255, 192);
             answers[1] = playerVoiceRec.resultString
@@ -203,7 +203,7 @@ function answerRecord() {
         }
     }
 
-    if (state = `Question3`) {
+    if (state === `Question3`) {
         if (playerVoiceRec.resultValue == true) {
             background(192, 255, 192);
             answers[2] = playerVoiceRec.resultString
@@ -216,22 +216,22 @@ function answerRecord() {
 
 function robotTestingQuestions() {
 
-    if (state = `knowledgeTest1`) {
+    if (state === `knowledgeTest1`) {
 
     }
 
-    if (state = `knowledgeTest2`) {
+    if (state === `knowledgeTest2`) {
 
     }
 
-    if (state = `knowledgeTest3`) {
+    if (state === `knowledgeTest3`) {
 
     }
 }
 
 function knowledgeChecks() {
 
-    if (state = `knowledgeTest1`) {
+    if (state === `knowledgeTest1`) {
         if (playerVoiceRec.resultValue == true) {
             background(192, 255, 192);
             knowledgeCheckAnswer = random(answers)
@@ -239,7 +239,7 @@ function knowledgeChecks() {
         }
     }
 
-    if (state = `knowledgeTest2`) {
+    if (state === `knowledgeTest2`) {
         if (playerVoiceRec.resultValue == true) {
             background(192, 255, 192);
             knowledgeCheckAnswer = random(answers)
@@ -247,7 +247,7 @@ function knowledgeChecks() {
         }
     }
 
-    if (state = `knowledgeTest3`) {
+    if (state === `knowledgeTest3`) {
         if (playerVoiceRec.resultValue == true) {
             background(192, 255, 192);
             knowledgeCheckAnswer = random(answers)
@@ -258,35 +258,29 @@ function knowledgeChecks() {
 }
 
 function nextQuestion() {
-    if (playerVoiceRec.resultValue == true) {
+    if (playerVoiceRec.resultValue === true) {
 
-        if (state = `Question1`) {
+        if (state === `Question1`) {
             setTimeout(() => { state = `Question2` }, 2000);
-            setTimeout(playerVoiceRec.resultValue = false, 2000)
         }
 
-        if (state = `Question2`) {
+        if (state === `Question2`) {
             setTimeout(() => { state = `Question3` }, 2000);
-            setTimeout(playerVoiceRec.resultValue = false, 2000)
         }
 
-        if (state = `Question3`) {
+        if (state === `Question3`) {
             setTimeout(() => { state = `KnowledgeTest1` }, 2000);
-            setTimeout(playerVoiceRec.resultValue = false, 2000)
         }
 
-        if (state = `knowledgeTest1`) {
+        if (state === `knowledgeTest1`) {
             setTimeout(() => { state = `KnowledgeTest2` }, 2000);
-            setTimeout(playerVoiceRec.resultValue = false, 2000)
         }
 
-        if (state = `knowledgeTest2`) {
+        if (state === `knowledgeTest2`) {
             setTimeout(() => { state = `KnowledgeTest3` }, 2000);
-            setTimeout(playerVoiceRec.resultValue = false, 2000)
         }
-        if (state = `knowledgeTest3`) {
+        if (state === `knowledgeTest3`) {
             setTimeout(() => { state = `endScreen` }, 2000);
-            setTimeout(playerVoiceRec.resultValue = false, 2000)
         }
     }
 }
@@ -313,7 +307,7 @@ function resetProgram() {
 
     else {
         voice.speak(`Resetting.`);
-        state = `introduction`
+        setTimeout(() => { state = `introduction` }, 2000);
     }
 
 }
