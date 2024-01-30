@@ -16,9 +16,13 @@ var playerVoiceRec = new p5.SpeechRec(); // new P5.SpeechRec object
 let state = `Introduction`
 
 // Sets up the variables used to store answers from the questions
-let firstAnswer
-let secondAnswer
-let thirdAnswer
+let answers = [
+    firstAnswer,
+    secondAnswer,
+    thirdAnswer
+]
+// Sets up the variable used by the robot to answer the question
+let knowledgeCheckAnswer
 
 // Sets up the variables used for sounds
 let bgMusic
@@ -49,7 +53,6 @@ Creates the canvas and sets up the initial instructions relative to the speech r
 function setup() {
     createCanvas(800, 800);
 
-
 }
 
 
@@ -67,44 +70,49 @@ function draw() {
     if (state === `Question1`) {
 
         questions()
+        setTimeout(playerAnswer, 3000)
 
-        playerVoiceRec.onResult = answerRecord;
-        playerVoiceRec.start();
 
         nextQuestion()
     }
 
     if (state === `Question2`) {
         questions()
+        setTimeout(playerAnswer, 3000)
 
         nextQuestion()
     }
 
     if (state === `Question3`) {
         questions()
+        setTimeout(playerAnswer, 3000)
 
         nextQuestion()
     }
 
 
     if (state === `knowledgeTest1`) {
-        knowledgeChecks()
+        robotQuestions()
+        setTimeout(playerAsking, 3000)
 
         nextQuestion()
     }
 
     if (state === `knowledgeTest2`) {
-        knowledgeChecks()
+        robotQuestions()
+        setTimeout(playerAsking, 3000)
 
         nextQuestion()
     }
 
     if (state === `knowledgeTest3`) {
-        knowledgeChecks()
+        robotQuestions()
+        setTimeout(playerAsking, 3000)
 
         nextQuestion()
     }
 
+    backgroundImage()
 
     if (state === `endscreen`) {
         endScreen()
@@ -129,6 +137,10 @@ function playBgMusic() {
     }
 }
 
+function backgroundImage() {
+    background(255, 0, 255);
+}
+
 function introduction() {
     background(255, 255, 255);
     fill(0, 0, 0, 255);
@@ -137,6 +149,24 @@ function introduction() {
     textAlign(CENTER);
     text("say something", width / 2, height / 2);
 
+}
+
+function playerAnswer() {
+
+    if (state === `Question1` || state === `Question2` || state === `Question3`) {
+        playerVoiceRec.onResult = answerRecord;
+        playerVoiceRec.start();
+    }
+
+
+}
+
+function playerAsking() {
+
+    if (state === `KnowledgeTest1` || state === `KnowledgeTest2` || state === `KnowledgeTest3`) {
+        playerVoiceRec.onResult = knowledgeChecks;
+        playerVoiceRec.start();
+    }
 }
 
 function questions() {
@@ -158,8 +188,8 @@ function answerRecord() {
     if (state = `Question1`) {
         if (playerVoiceRec.resultValue == true) {
             background(192, 255, 192);
-            firstAnswer = playerVoiceRec.resultString
-            text(firstAnswer, width / 2, height / 2);
+            answers[0] = playerVoiceRec.resultString
+            text(answers[0], width / 2, height / 2);
             console.log(firstAnswer);
         }
     }
@@ -167,8 +197,8 @@ function answerRecord() {
     if (state = `Question2`) {
         if (playerVoiceRec.resultValue == true) {
             background(192, 255, 192);
-            secondAnswer = playerVoiceRec.resultString
-            text(secondAnswer, width / 2, height / 2);
+            answers[1] = playerVoiceRec.resultString
+            text(answers[1], width / 2, height / 2);
             console.log(secondAnswer);
         }
     }
@@ -176,12 +206,27 @@ function answerRecord() {
     if (state = `Question3`) {
         if (playerVoiceRec.resultValue == true) {
             background(192, 255, 192);
-            thirdAnswer = playerVoiceRec.resultString
-            text(thirdAnswer, width / 2, height / 2);
+            answers[2] = playerVoiceRec.resultString
+            text(answers[2], width / 2, height / 2);
             console.log(thirdAnswer);
         }
     }
 
+}
+
+function robotTestingQuestions() {
+
+    if (state = `knowledgeTest1`) {
+
+    }
+
+    if (state = `knowledgeTest2`) {
+
+    }
+
+    if (state = `knowledgeTest3`) {
+
+    }
 }
 
 function knowledgeChecks() {
@@ -189,27 +234,24 @@ function knowledgeChecks() {
     if (state = `knowledgeTest1`) {
         if (playerVoiceRec.resultValue == true) {
             background(192, 255, 192);
-            firstAnswer = playerVoiceRec.resultString
-            text(firstAnswer, width / 2, height / 2);
-            console.log(firstAnswer);
+            knowledgeCheckAnswer = random(answers)
+            text(knowledgeCheckAnswer, width / 2, height / 2);
         }
     }
 
     if (state = `knowledgeTest2`) {
         if (playerVoiceRec.resultValue == true) {
             background(192, 255, 192);
-            secondAnswer = playerVoiceRec.resultString
-            text(secondAnswer, width / 2, height / 2);
-            console.log(secondAnswer);
+            knowledgeCheckAnswer = random(answers)
+            text(knowledgeCheckAnswer, width / 2, height / 2);
         }
     }
 
     if (state = `knowledgeTest3`) {
         if (playerVoiceRec.resultValue == true) {
             background(192, 255, 192);
-            thirdAnswer = playerVoiceRec.resultString
-            text(thirdAnswer, width / 2, height / 2);
-            console.log(thirdAnswer);
+            knowledgeCheckAnswer = random(answers)
+            text(knowledgeCheckAnswer, width / 2, height / 2);
         }
     }
 
@@ -219,31 +261,31 @@ function nextQuestion() {
     if (playerVoiceRec.resultValue == true) {
 
         if (state = `Question1`) {
-            setTimeout(state = `Question2`, 2000);
+            setTimeout(() => { state = `Question2` }, 2000);
             setTimeout(playerVoiceRec.resultValue = false, 2000)
         }
 
         if (state = `Question2`) {
-            setTimeout(state = `Question3`, 2000);
+            setTimeout(() => { state = `Question3` }, 2000);
             setTimeout(playerVoiceRec.resultValue = false, 2000)
         }
 
         if (state = `Question3`) {
-            setTimeout(state = `knowledgeTest1`, 2000);
+            setTimeout(() => { state = `KnowledgeTest1` }, 2000);
             setTimeout(playerVoiceRec.resultValue = false, 2000)
         }
 
         if (state = `knowledgeTest1`) {
-            setTimeout(state = `knowledgeTest2`, 2000);
+            setTimeout(() => { state = `KnowledgeTest2` }, 2000);
             setTimeout(playerVoiceRec.resultValue = false, 2000)
         }
 
         if (state = `knowledgeTest2`) {
-            setTimeout(state = `knowledgeTest3`, 2000);
+            setTimeout(() => { state = `KnowledgeTest3` }, 2000);
             setTimeout(playerVoiceRec.resultValue = false, 2000)
         }
         if (state = `knowledgeTest3`) {
-            setTimeout(state = `endScreen`, 2000);
+            setTimeout(() => { state = `endScreen` }, 2000);
             setTimeout(playerVoiceRec.resultValue = false, 2000)
         }
     }
