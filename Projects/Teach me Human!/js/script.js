@@ -16,11 +16,8 @@ var playerVoiceRec = new p5.SpeechRec(); // new P5.SpeechRec object
 let state = `Introduction`
 
 // Sets up the variables used to store answers from the questions
-let answers = [
-    firstAnswer,
-    secondAnswer,
-    thirdAnswer
-]
+let answers = []
+
 // Sets up the variable used by the robot to answer the question
 let knowledgeCheckAnswer
 
@@ -60,6 +57,10 @@ function setup() {
 Description of draw()
 */
 function draw() {
+    console.log(state)
+    console.log(answers[0])
+    console.log(answers[1])
+    console.log(answers[2])
 
     if (state === `introduction`) {
         introduction()
@@ -112,7 +113,7 @@ function draw() {
         nextQuestion()
     }
 
-    backgroundImage()
+    // backgroundImage()
 
     if (state === `endscreen`) {
         endScreen()
@@ -123,9 +124,8 @@ function draw() {
 }
 
 function mousePressed() {
-    voice.speak(firstAnswer);
     if (state === `Introduction`) {
-        state = `playerTurn`;
+        state = `Question1`;
         // playBgMusic()
         // gameStartSFX.play();
     }
@@ -171,15 +171,18 @@ function playerAsking() {
 
 function questions() {
     if (state === `Question1`) {
-
+        voice.speak(`How do humans answer positively to a question?`)
+        setTimeout(() => voice.speak.cancel(), 2000);
     }
 
     if (state === `Question2`) {
-
+        voice.speak(`How do humans answer negatively to a question?`)
+        setTimeout(() => { voice.speak.cancel() }, 2000);
     }
 
     if (state === `Question3`) {
-
+        voice.speak(`How do humans answer ambiguously to a question?`)
+        setTimeout(() => { voice.speak.cancel() }, 2000);
     }
 }
 
