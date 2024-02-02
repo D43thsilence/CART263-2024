@@ -11,6 +11,7 @@ author, and this description to match your project!
 // Sets up the variables used for the speech recording and synthesis
 let voice = new p5.Speech();
 var playerVoiceRec = new p5.SpeechRec(); // new P5.SpeechRec object
+playerVoiceRec.continuous = true;
 
 // Sets up the initial state of the program
 let state = `Introduction`
@@ -50,6 +51,9 @@ Creates the canvas and sets up the initial instructions relative to the speech r
 function setup() {
     createCanvas(800, 800);
 
+    playerVoiceRec.start();
+    // playerVoiceRec.onResult = answerRecord;
+
 }
 
 
@@ -71,24 +75,30 @@ function draw() {
     if (state === `Question1`) {
 
         questions()
-        setTimeout(playerAnswer, 3000)
+        // setTimeout(playerAnswer, 3000)
+        playerAnswer()
 
-
-        nextQuestion()
+        // nextQuestion()
+        // nextQuestionAlt()
+        // keyPressed()
     }
 
     if (state === `Question2`) {
         questions()
-        setTimeout(playerAnswer, 3000)
-
-        nextQuestion()
+        // setTimeout(playerAnswer, 3000)
+        playerAnswer()
+        // nextQuestion()
+        // nextQuestionAlt()
+        // keyPressed()
     }
 
     if (state === `Question3`) {
         questions()
-        setTimeout(playerAnswer, 3000)
-
-        nextQuestion()
+        // setTimeout(playerAnswer, 3000)
+        playerAnswer()
+        // nextQuestion()
+        // nextQuestionAlt()
+        // keyPressed()
     }
 
 
@@ -96,7 +106,8 @@ function draw() {
         robotTestingQuestions()
         setTimeout(playerAsking, 3000)
 
-        nextQuestion()
+        // nextQuestion()
+        // keyPressed()
     }
 
     if (state === `knowledgeTest2`) {
@@ -104,13 +115,15 @@ function draw() {
         setTimeout(playerAsking, 3000)
 
         nextQuestion()
+        // keyPressed()
     }
 
     if (state === `knowledgeTest3`) {
         robotTestingQuestions()
         setTimeout(playerAsking, 3000)
 
-        nextQuestion()
+        // nextQuestion()
+        // keyPressed()
     }
 
     // backgroundImage()
@@ -151,40 +164,31 @@ function introduction() {
     // bgMusic.stop();
 }
 
-function playerAnswer() {
-
-    if (state === `Question1` || state === `Question2` || state === `Question3`) {
-        playerVoiceRec.onResult = answerRecord;
-        playerVoiceRec.start();
-    }
-
-
-}
-
-function playerAsking() {
-
-    if (state === `KnowledgeTest1` || state === `KnowledgeTest2` || state === `KnowledgeTest3`) {
-        playerVoiceRec.onResult = knowledgeChecks;
-        playerVoiceRec.start();
-    }
-}
-
 function questions() {
     if (state === `Question1`) {
         voice.speak(`How do humans answer positively to a question?`)
-        setTimeout(() => voice.speak.cancel(), 2000);
+        // setTimeout(() => { voice.pause() }, 4000);
     }
 
     if (state === `Question2`) {
         voice.speak(`How do humans answer negatively to a question?`)
-        setTimeout(() => { voice.speak.cancel() }, 2000);
+        // setTimeout(() => { voice.pause() }, 4000);
     }
 
     if (state === `Question3`) {
         voice.speak(`How do humans answer ambiguously to a question?`)
-        setTimeout(() => { voice.speak.cancel() }, 2000);
+        // setTimeout(() => { voice.pause() }, 4000);
     }
 }
+
+function playerAnswer() {
+
+    if (state === `Question1` || state === `Question2` || state === `Question3`) {
+        // playerVoiceRec.start();
+        playerVoiceRec.onResult = answerRecord;
+    }
+}
+
 
 function answerRecord() {
 
@@ -193,7 +197,7 @@ function answerRecord() {
             background(192, 255, 192);
             answers[0] = playerVoiceRec.resultString
             text(answers[0], width / 2, height / 2);
-            console.log(firstAnswer);
+            nextQuestion()
         }
     }
 
@@ -202,7 +206,7 @@ function answerRecord() {
             background(192, 255, 192);
             answers[1] = playerVoiceRec.resultString
             text(answers[1], width / 2, height / 2);
-            console.log(secondAnswer);
+            nextQuestion()
         }
     }
 
@@ -211,7 +215,7 @@ function answerRecord() {
             background(192, 255, 192);
             answers[2] = playerVoiceRec.resultString
             text(answers[2], width / 2, height / 2);
-            console.log(thirdAnswer);
+            nextQuestion()
         }
     }
 
@@ -232,10 +236,20 @@ function robotTestingQuestions() {
     }
 }
 
+
+function playerAsking() {
+
+    if (state === `KnowledgeTest1` || state === `KnowledgeTest2` || state === `KnowledgeTest3`) {
+        playerVoiceRec.onResult = knowledgeChecks;
+        // playerVoiceRec.start();
+    }
+}
+
+
 function knowledgeChecks() {
 
     if (state === `knowledgeTest1`) {
-        if (playerVoiceRec.resultValue == true) {
+        if (playerVoiceRec.resultValue === true) {
             background(192, 255, 192);
             knowledgeCheckAnswer = random(answers)
             text(knowledgeCheckAnswer, width / 2, height / 2);
@@ -243,7 +257,7 @@ function knowledgeChecks() {
     }
 
     if (state === `knowledgeTest2`) {
-        if (playerVoiceRec.resultValue == true) {
+        if (playerVoiceRec.resultValue === true) {
             background(192, 255, 192);
             knowledgeCheckAnswer = random(answers)
             text(knowledgeCheckAnswer, width / 2, height / 2);
@@ -251,7 +265,7 @@ function knowledgeChecks() {
     }
 
     if (state === `knowledgeTest3`) {
-        if (playerVoiceRec.resultValue == true) {
+        if (playerVoiceRec.resultValue === true) {
             background(192, 255, 192);
             knowledgeCheckAnswer = random(answers)
             text(knowledgeCheckAnswer, width / 2, height / 2);
@@ -260,33 +274,68 @@ function knowledgeChecks() {
 
 }
 
+// This function makes the robot automatically progress to its next question.
 function nextQuestion() {
     if (playerVoiceRec.resultValue === true) {
 
         if (state === `Question1`) {
-            setTimeout(() => { state = `Question2` }, 2000);
+            setTimeout(() => { state = `Question2` }, 1000);
         }
 
         if (state === `Question2`) {
-            setTimeout(() => { state = `Question3` }, 2000);
+            setTimeout(() => { state = `Question3` }, 1000);
         }
 
         if (state === `Question3`) {
-            setTimeout(() => { state = `KnowledgeTest1` }, 2000);
+            setTimeout(() => { state = `KnowledgeTest1` }, 1000);
         }
 
         if (state === `knowledgeTest1`) {
-            setTimeout(() => { state = `KnowledgeTest2` }, 2000);
+            setTimeout(() => { state = `KnowledgeTest2` }, 1000);
         }
 
         if (state === `knowledgeTest2`) {
-            setTimeout(() => { state = `KnowledgeTest3` }, 2000);
+            setTimeout(() => { state = `KnowledgeTest3` }, 1000);
         }
         if (state === `knowledgeTest3`) {
-            setTimeout(() => { state = `endScreen` }, 2000);
+            setTimeout(() => { state = `endScreen` }, 1000);
         }
     }
 }
+
+// This function allows the player to return to any question the robot asked or to skip ahead questions even.
+function keyPressed() {
+
+    if (keyCode === 49) {
+        state = `Question1`
+    }
+
+    if (keyCode === 50) {
+        state = `Question2`
+    }
+
+    if (keyCode === 51) {
+        state = `Question3`
+    }
+
+    if (keyCode === 52) {
+        state = `KnowledgeTest1`
+    }
+
+    if (keyCode === 53) {
+        state = `KnowledgeTest2`
+    }
+
+    if (keyCode === 54) {
+        state = `KnowledgeTest2`
+    }
+
+    if (keyCode === 55) {
+        state = `endScreen`
+    }
+
+}
+
 
 function resetProgram() {
 
