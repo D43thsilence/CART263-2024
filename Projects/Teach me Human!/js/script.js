@@ -19,6 +19,9 @@ let state = `Introduction`
 // Sets up the variables used to store answers from the questions
 let answers = []
 
+// Sets up the variables used to store questions
+let questions = []
+
 // Sets up the variable used by the robot to answer the question
 let knowledgeCheckAnswer
 
@@ -51,9 +54,7 @@ Creates the canvas and sets up the initial instructions relative to the speech r
 function setup() {
     createCanvas(800, 800);
 
-    playerVoiceRec.start();
-    // playerVoiceRec.onResult = answerRecord;
-
+    voice.setVoice(`Kyoko`);
 }
 
 
@@ -65,74 +66,57 @@ function draw() {
     console.log(answers[0])
     console.log(answers[1])
     console.log(answers[2])
+    console.log(questions[0])
+    console.log(questions[1])
+    console.log(questions[2])
 
-    if (state === `introduction`) {
-        introduction()
+    if (state === `Introduction`) {
+        titleScreen()
 
     }
 
 
     if (state === `Question1`) {
-
-        questions()
-        // setTimeout(playerAnswer, 3000)
-        playerAnswer()
-
-        // nextQuestion()
-        // nextQuestionAlt()
-        // keyPressed()
+        robotLearning()
+        playerSpeech()
     }
 
     if (state === `Question2`) {
-        questions()
-        // setTimeout(playerAnswer, 3000)
-        playerAnswer()
-        // nextQuestion()
-        // nextQuestionAlt()
-        // keyPressed()
+        robotLearning()
+        playerSpeech()
+
     }
 
     if (state === `Question3`) {
-        questions()
-        // setTimeout(playerAnswer, 3000)
-        playerAnswer()
-        // nextQuestion()
-        // nextQuestionAlt()
-        // keyPressed()
+        robotLearning()
+        playerSpeech()
     }
 
 
     if (state === `knowledgeTest1`) {
-        robotTestingQuestions()
-        setTimeout(playerAsking, 3000)
+        robotLearning()
+        playerSpeech()
 
-        // nextQuestion()
-        // keyPressed()
     }
 
     if (state === `knowledgeTest2`) {
-        robotTestingQuestions()
-        setTimeout(playerAsking, 3000)
+        robotLearning()
+        playerSpeech()
 
-        nextQuestion()
-        // keyPressed()
     }
 
     if (state === `knowledgeTest3`) {
-        robotTestingQuestions()
-        setTimeout(playerAsking, 3000)
+        robotLearning()
+        playerSpeech()
 
-        // nextQuestion()
-        // keyPressed()
     }
-
-    // backgroundImage()
 
     if (state === `endscreen`) {
         endScreen()
 
     }
 
+    // backgroundImage()
 
 }
 
@@ -142,6 +126,7 @@ function mousePressed() {
         // playBgMusic()
         // gameStartSFX.play();
     }
+    playerVoiceRec.start();
 }
 
 function playBgMusic() {
@@ -151,12 +136,12 @@ function playBgMusic() {
 }
 
 function backgroundImage() {
-    background(255, 0, 255);
+    background(210, 210, 240);
 }
 
-function introduction() {
-    background(255, 255, 255);
-    fill(0, 0, 0, 255);
+function titleScreen() {
+    background(210, 210, 240);
+    // fill(0, 0, 0, 255);
 
     textSize(32);
     textAlign(CENTER);
@@ -164,29 +149,45 @@ function introduction() {
     // bgMusic.stop();
 }
 
-function questions() {
+function robotLearning() {
     if (state === `Question1`) {
         voice.speak(`How do humans answer positively to a question?`)
-        // setTimeout(() => { voice.pause() }, 4000);
     }
 
     if (state === `Question2`) {
         voice.speak(`How do humans answer negatively to a question?`)
-        // setTimeout(() => { voice.pause() }, 4000);
     }
 
     if (state === `Question3`) {
         voice.speak(`How do humans answer ambiguously to a question?`)
-        // setTimeout(() => { voice.pause() }, 4000);
     }
+
+    if (state === `knowledgeTest1`) {
+        voice.speak(`I wish to test what you taught me. Ask me a question that I could answer with what I learned.`)
+    }
+
+    if (state === `knowledgeTest2`) {
+        voice.speak(`I wish to keep testing. Ask me another one.`)
+    }
+
+    if (state === `knowledgeTest3`) {
+        voice.speak(`Just a little more. Ask me another one last question.`)
+    }
+    console.log(`learn`)
 }
 
-function playerAnswer() {
+function playerSpeech() {
 
     if (state === `Question1` || state === `Question2` || state === `Question3`) {
-        // playerVoiceRec.start();
         playerVoiceRec.onResult = answerRecord;
+
     }
+
+    if (state == `knowledgeTest1` || state == `knowledgeTest2` || state == `knowledgeTest3`) {
+        playerVoiceRec.onResult = knowledgeChecks;
+
+    }
+    console.log(`hello`)
 }
 
 
@@ -195,80 +196,80 @@ function answerRecord() {
     if (state === `Question1`) {
         if (playerVoiceRec.resultValue == true) {
             background(192, 255, 192);
-            answers[0] = playerVoiceRec.resultString
+            answers[0] = playerVoiceRec.resultString;
+            textSize(64);
+            textAlign(CENTER);
             text(answers[0], width / 2, height / 2);
-            nextQuestion()
+            nextQuestion();
         }
     }
 
     if (state === `Question2`) {
         if (playerVoiceRec.resultValue == true) {
-            background(192, 255, 192);
-            answers[1] = playerVoiceRec.resultString
+            background(255, 192, 192);
+            answers[1] = playerVoiceRec.resultString;
+            textSize(64);
+            textAlign(CENTER);
             text(answers[1], width / 2, height / 2);
-            nextQuestion()
+            nextQuestion();
         }
     }
 
     if (state === `Question3`) {
         if (playerVoiceRec.resultValue == true) {
-            background(192, 255, 192);
-            answers[2] = playerVoiceRec.resultString
+            background(255, 255, 192);
+            answers[2] = playerVoiceRec.resultString;
+            textSize(64);
+            textAlign(CENTER);
             text(answers[2], width / 2, height / 2);
-            nextQuestion()
+            nextQuestion();
         }
     }
 
-}
-
-function robotTestingQuestions() {
-
-    if (state === `knowledgeTest1`) {
-
-    }
-
-    if (state === `knowledgeTest2`) {
-
-    }
-
-    if (state === `knowledgeTest3`) {
-
-    }
-}
-
-
-function playerAsking() {
-
-    if (state === `KnowledgeTest1` || state === `KnowledgeTest2` || state === `KnowledgeTest3`) {
-        playerVoiceRec.onResult = knowledgeChecks;
-        // playerVoiceRec.start();
-    }
 }
 
 
 function knowledgeChecks() {
 
     if (state === `knowledgeTest1`) {
-        if (playerVoiceRec.resultValue === true) {
+        if (playerVoiceRec.resultValue == true) {
             background(192, 255, 192);
-            knowledgeCheckAnswer = random(answers)
+            textSize(64);
+            textAlign(CENTER);
+            questions[0] = playerVoiceRec.resultString;
+            text(questions[0], width / 2.5, height / 2.5);
+            knowledgeCheckAnswer = random(answers);
+            textSize(64);
             text(knowledgeCheckAnswer, width / 2, height / 2);
+            nextQuestion();
         }
     }
 
     if (state === `knowledgeTest2`) {
-        if (playerVoiceRec.resultValue === true) {
+        if (playerVoiceRec.resultValue == true) {
             background(192, 255, 192);
-            knowledgeCheckAnswer = random(answers)
+            textSize(64);
+            textAlign(CENTER);
+            questions[1] = playerVoiceRec.resultString;
+            text(questions[1], width / 2.5, height / 2.5);
+            textSize(64);
+            knowledgeCheckAnswer = random(answers);
             text(knowledgeCheckAnswer, width / 2, height / 2);
+            nextQuestion();
         }
     }
 
     if (state === `knowledgeTest3`) {
-        if (playerVoiceRec.resultValue === true) {
+        if (playerVoiceRec.resultValue == true) {
             background(192, 255, 192);
-            knowledgeCheckAnswer = random(answers)
+            textSize(64);
+            textAlign(CENTER);
+            questions[2] = playerVoiceRec.resultString;
+            text(questions[2], width / 2.5, height / 2.5);
+            textSize(64);
+            knowledgeCheckAnswer = random(answers);
             text(knowledgeCheckAnswer, width / 2, height / 2);
+            nextQuestion();
         }
     }
 
@@ -327,7 +328,7 @@ function keyPressed() {
     }
 
     if (keyCode === 54) {
-        state = `KnowledgeTest2`
+        state = `KnowledgeTest3`
     }
 
     if (keyCode === 55) {
@@ -342,7 +343,6 @@ function resetProgram() {
     if (!playerVoiceRec.resultValue) {
         return;
     }
-    console.log(playerVoiceRec.resultString);
 
     for (let command of commands) {
         if (playerVoiceRec.resultString.toLowerCase() === command.command) {
@@ -368,7 +368,7 @@ function endScreen() {
     // Draws the end screen
     textAlign(CENTER);
     textSize(65);
-    fill(255, 255, 255);
+    background(100, 100, 100);
     text(`You've taught the robot how to speak like a human!`, width / 2, height / 2);
     // gameWinSFX.play();
     // bgMusic.stop();
