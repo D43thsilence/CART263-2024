@@ -2,8 +2,7 @@
 Teach me Human!
 Malcolm Siné Tadonki
 
-This is a template. You must fill in the title,
-author, and this description to match your project!
+This project's code makes the robot ask you questions and write them and the answers on the screen 
 */
 
 "use strict";
@@ -12,6 +11,10 @@ author, and this description to match your project!
 let voice = new p5.Speech();
 var playerVoiceRec = new p5.SpeechRec(); // new P5.SpeechRec object
 playerVoiceRec.continuous = true;
+
+// Stes the framerate and the ID's for the animations
+const FRAME_RATE = 30
+let rectangles = []
 
 // Sets up the initial state of the program
 let state = `Introduction`
@@ -55,6 +58,7 @@ function setup() {
     createCanvas(800, 800);
 
     voice.setVoice(`Kyoko`);
+    voice.setRate(0.9);
 }
 
 
@@ -116,7 +120,7 @@ function draw() {
 
     }
 
-    // backgroundImage()
+    backgroundImage()
 
 }
 
@@ -137,15 +141,16 @@ function playBgMusic() {
 
 function backgroundImage() {
     background(210, 210, 240);
+
 }
 
 function titleScreen() {
     background(210, 210, 240);
-    // fill(0, 0, 0, 255);
-
-    textSize(32);
+    textSize(36);
     textAlign(CENTER);
-    text("say something", width / 2, height / 2);
+    text("Teach me how to speak like you! Human!", width / 2, height / 2);
+    textSize(16);
+    text("Click to start and press the numbers 1 to 7 to swap between the different questions and states of the program.", width / 1.5, height / 1.5);
     // bgMusic.stop();
 }
 
@@ -173,7 +178,7 @@ function robotLearning() {
     if (state === `knowledgeTest3`) {
         voice.speak(`Just a little more. Ask me another one last question.`)
     }
-    console.log(`learn`)
+
 }
 
 function playerSpeech() {
@@ -187,7 +192,7 @@ function playerSpeech() {
         playerVoiceRec.onResult = knowledgeChecks;
 
     }
-    console.log(`hello`)
+
 }
 
 
@@ -195,7 +200,8 @@ function answerRecord() {
 
     if (state === `Question1`) {
         if (playerVoiceRec.resultValue == true) {
-            background(192, 255, 192);
+            fill(192, 255, 192);
+            animS.quad(rectangles[0], FRAME_RATE * 6, 50, 150, 750, 150, 750, 600, 50, 600);
             answers[0] = playerVoiceRec.resultString;
             textSize(64);
             textAlign(CENTER);
@@ -206,7 +212,8 @@ function answerRecord() {
 
     if (state === `Question2`) {
         if (playerVoiceRec.resultValue == true) {
-            background(255, 192, 192);
+            fill(255, 192, 192);
+            animS.quad(rectangles[1], FRAME_RATE * 6, 50, 150, 750, 150, 750, 600, 50, 600);
             answers[1] = playerVoiceRec.resultString;
             textSize(64);
             textAlign(CENTER);
@@ -217,7 +224,8 @@ function answerRecord() {
 
     if (state === `Question3`) {
         if (playerVoiceRec.resultValue == true) {
-            background(255, 255, 192);
+            fill(255, 255, 192);
+            animS.quad(rectangles[2], FRAME_RATE * 6, 50, 150, 750, 150, 750, 600, 50, 600);
             answers[2] = playerVoiceRec.resultString;
             textSize(64);
             textAlign(CENTER);
@@ -233,7 +241,8 @@ function knowledgeChecks() {
 
     if (state === `knowledgeTest1`) {
         if (playerVoiceRec.resultValue == true) {
-            background(192, 255, 192);
+            fill(192, 255, 192);
+            animS.quad(rectangles[3], FRAME_RATE * 6, 50, 150, 750, 150, 750, 600, 50, 600);
             textSize(64);
             textAlign(CENTER);
             questions[0] = playerVoiceRec.resultString;
@@ -247,7 +256,8 @@ function knowledgeChecks() {
 
     if (state === `knowledgeTest2`) {
         if (playerVoiceRec.resultValue == true) {
-            background(192, 255, 192);
+            fill(192, 255, 192);
+            animS.quad(rectangles[4], FRAME_RATE * 6, 50, 150, 750, 150, 750, 600, 50, 600);
             textSize(64);
             textAlign(CENTER);
             questions[1] = playerVoiceRec.resultString;
@@ -261,7 +271,8 @@ function knowledgeChecks() {
 
     if (state === `knowledgeTest3`) {
         if (playerVoiceRec.resultValue == true) {
-            background(192, 255, 192);
+            fill(192, 255, 192);
+            animS.quad(rectangles[5], FRAME_RATE * 6, 50, 150, 750, 150, 750, 600, 50, 600);
             textSize(64);
             textAlign(CENTER);
             questions[2] = playerVoiceRec.resultString;
@@ -281,25 +292,31 @@ function nextQuestion() {
 
         if (state === `Question1`) {
             setTimeout(() => { state = `Question2` }, 1000);
+            animS.reset();
         }
 
         if (state === `Question2`) {
             setTimeout(() => { state = `Question3` }, 1000);
+            animS.reset();
         }
 
         if (state === `Question3`) {
-            setTimeout(() => { state = `KnowledgeTest1` }, 1000);
+            setTimeout(() => { state = `knowledgeTest1` }, 1000);
+            animS.reset();
         }
 
         if (state === `knowledgeTest1`) {
-            setTimeout(() => { state = `KnowledgeTest2` }, 1000);
+            setTimeout(() => { state = `knowledgeTest2` }, 1000);
+            animS.reset();
         }
 
         if (state === `knowledgeTest2`) {
-            setTimeout(() => { state = `KnowledgeTest3` }, 1000);
+            setTimeout(() => { state = `knowledgeTest3` }, 1000);
+            animS.reset();
         }
         if (state === `knowledgeTest3`) {
-            setTimeout(() => { state = `endScreen` }, 1000);
+            setTimeout(() => { state = `endscreen` }, 1000);
+            animS.reset();
         }
     }
 }
@@ -308,31 +325,38 @@ function nextQuestion() {
 function keyPressed() {
 
     if (keyCode === 49) {
-        state = `Question1`
+        state = `Question1`;
+        animS.reset();
     }
 
     if (keyCode === 50) {
-        state = `Question2`
+        state = `Question2`;
+        animS.reset();
     }
 
     if (keyCode === 51) {
-        state = `Question3`
+        state = `Question3`;
+        animS.reset();
     }
 
     if (keyCode === 52) {
-        state = `KnowledgeTest1`
+        state = `knowledgeTest1`;
+        animS.reset();
     }
 
     if (keyCode === 53) {
-        state = `KnowledgeTest2`
+        state = `knowledgeTest2`;
+        animS.reset();
     }
 
     if (keyCode === 54) {
-        state = `KnowledgeTest3`
+        state = `knowledgeTest3`;
+        animS.reset();
     }
 
     if (keyCode === 55) {
-        state = `endScreen`
+        state = `endscreen`;
+        animS.reset();
     }
 
 }
@@ -367,9 +391,11 @@ function resetProgram() {
 function endScreen() {
     // Draws the end screen
     textAlign(CENTER);
-    textSize(65);
-    background(100, 100, 100);
+    textSize(34);
+    fill(200, 200, 200);
+    animS.quad(rectangles[6], FRAME_RATE * 6, 50, 150, 750, 150, 750, 600, 50, 600);
     text(`You've taught the robot how to speak like a human!`, width / 2, height / 2);
+    animS.reset();
     // gameWinSFX.play();
     // bgMusic.stop();
     // noLoop();
