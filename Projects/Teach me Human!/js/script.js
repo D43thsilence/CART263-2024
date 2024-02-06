@@ -157,6 +157,7 @@ function titleScreen() {
 function robotLearning() {
     if (state === `Question1`) {
         voice.speak(`How do humans answer positively to a question?`)
+        
     }
 
     if (state === `Question2`) {
@@ -359,6 +360,14 @@ function keyPressed() {
         animS.reset();
     }
 
+    if (keyCode === 56) {
+        voice.pause()
+    }
+
+    if (keyCode === 57) {
+        voice.resume()
+    }
+
 }
 
 
@@ -396,7 +405,6 @@ function endScreen() {
     animS.quad(rectangles[6], FRAME_RATE * 6, 50, 150, 750, 150, 750, 600, 50, 600);
     text(`You've taught the robot how to speak like a human!`, width / 2, height / 2);
     animS.reset();
-    // gameWinSFX.play();
     // bgMusic.stop();
     // noLoop();
 }
