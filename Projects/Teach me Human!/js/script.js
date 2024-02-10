@@ -132,7 +132,6 @@ function titleScreen() {
     textSize(16);
     text("Click to start! press the numbers 1 to 7 to swap between the different questions and states of the program.", width / 2, height / 2);
     text("Use the numbers 8 and 9 to pause and resume the robot's speech", width / 2, height / 1.8);
-    // bgMusic.stop();
 }
 
 // Lets the robot speak different sentences depending on the state
@@ -176,7 +175,7 @@ function playerSpeech() {
 
 }
 
-// Records the player's answers and writes them on the screen
+// Records the player's answers, writes them on the screen and automatically proceeds to the next question (state)
 function answerRecord() {
 
     if (state === `Question1`) {
