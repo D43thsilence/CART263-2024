@@ -28,35 +28,27 @@ let questions = []
 // Sets up the variable used by the robot to answer the question
 let knowledgeCheckAnswer
 
-// Sets up the variables used for sounds
-let bgMusic
-let gameStartSFX
-let gameWinSFX
-
-// Sets up commands that can be used anytime
-const commands = [
-    {
-        "command": "Reset the program",
-        "callback": resetProgram
-    }
-
-]
+// Sets up the variables used for the background image
+let bgImage
 
 
 /**
 Description of preload
+Preloads the background image used for the title screen and the end screen
 */
 function preload() {
+    bgImage = loadImage('assets/images/Program Background.png')
 
 }
 
 
 /**
-Creates the canvas and sets up the initial instructions relative to the speech recognition
+Description of Setup
+
+Creates the canvas and sets up the voce and the speech rate relative to the robot's speech. 
 */
 function setup() {
     createCanvas(800, 800);
-
     voice.setVoice(`Kyoko`);
     voice.setRate(0.9);
 }
@@ -64,15 +56,10 @@ function setup() {
 
 /**
 Description of draw()
+
+Runs the majority of the program by managing the states and the functions that run in each one respectively
 */
 function draw() {
-    console.log(state)
-    console.log(answers[0])
-    console.log(answers[1])
-    console.log(answers[2])
-    console.log(questions[0])
-    console.log(questions[1])
-    console.log(questions[2])
 
     if (state === `Introduction`) {
         titleScreen()
@@ -88,7 +75,6 @@ function draw() {
     if (state === `Question2`) {
         robotLearning()
         playerSpeech()
-
     }
 
     if (state === `Question3`) {
@@ -100,64 +86,59 @@ function draw() {
     if (state === `knowledgeTest1`) {
         robotLearning()
         playerSpeech()
-
     }
 
     if (state === `knowledgeTest2`) {
         robotLearning()
         playerSpeech()
-
     }
 
     if (state === `knowledgeTest3`) {
         robotLearning()
         playerSpeech()
-
     }
 
     if (state === `endscreen`) {
         endScreen()
-
     }
 
-    backgroundImage()
+
 
 }
 
+// Begins the program by swapping to the Question1 state and initiating voice recognition by clicking with the mouse
 function mousePressed() {
     if (state === `Introduction`) {
         state = `Question1`;
-        // playBgMusic()
-        // gameStartSFX.play();
+
     }
     playerVoiceRec.start();
 }
 
-function playBgMusic() {
-    if (!bgMusic.isPlaying()) {
-        bgMusic.loop();
-    }
-}
-
+// Draws the background image
 function backgroundImage() {
-    background(210, 210, 240);
-
+    imageMode(CENTER)
+    image(bgImage, width / 2, height / 2, 800, 800)
 }
 
+// Draws the title Screen
 function titleScreen() {
-    background(210, 210, 240);
+    image(bgImage, width / 2, height / 2, 800, 800)
+    animS.quad(rectangles[0], FRAME_RATE * 6, 10, 250, 790, 250, 790, 450, 10, 450);
+    imageMode(CENTER)
     textSize(36);
     textAlign(CENTER);
-    text("Teach me how to speak like you! Human!", width / 2, height / 2);
+    text("Teach me how to speak like you! Human!", width / 2, height / 2.5);
     textSize(16);
-    text("Click to start and press the numbers 1 to 7 to swap between the different questions and states of the program.", width / 1.5, height / 1.5);
+    text("Click to start! press the numbers 1 to 7 to swap between the different questions and states of the program.", width / 2, height / 2);
+    text("Use the numbers 8 and 9 to pause and resume the robot's speech", width / 2, height / 1.8);
     // bgMusic.stop();
 }
 
+// Lets the robot speak different sentences depending on the state
 function robotLearning() {
     if (state === `Question1`) {
         voice.speak(`How do humans answer positively to a question?`)
-        
     }
 
     if (state === `Question2`) {
@@ -182,27 +163,25 @@ function robotLearning() {
 
 }
 
+// Calls various functions depending on the state when the player's voice gives a result
 function playerSpeech() {
 
     if (state === `Question1` || state === `Question2` || state === `Question3`) {
         playerVoiceRec.onResult = answerRecord;
-
     }
 
     if (state == `knowledgeTest1` || state == `knowledgeTest2` || state == `knowledgeTest3`) {
         playerVoiceRec.onResult = knowledgeChecks;
-
     }
 
 }
 
-
+// Records the player's answers and writes them on the screen
 function answerRecord() {
 
     if (state === `Question1`) {
         if (playerVoiceRec.resultValue == true) {
-            fill(192, 255, 192);
-            animS.quad(rectangles[0], FRAME_RATE * 6, 50, 150, 750, 150, 750, 600, 50, 600);
+            background(192, 255, 192);
             answers[0] = playerVoiceRec.resultString;
             textSize(64);
             textAlign(CENTER);
@@ -213,8 +192,7 @@ function answerRecord() {
 
     if (state === `Question2`) {
         if (playerVoiceRec.resultValue == true) {
-            fill(255, 192, 192);
-            animS.quad(rectangles[1], FRAME_RATE * 6, 50, 150, 750, 150, 750, 600, 50, 600);
+            background(255, 192, 192);
             answers[1] = playerVoiceRec.resultString;
             textSize(64);
             textAlign(CENTER);
@@ -225,8 +203,7 @@ function answerRecord() {
 
     if (state === `Question3`) {
         if (playerVoiceRec.resultValue == true) {
-            fill(255, 255, 192);
-            animS.quad(rectangles[2], FRAME_RATE * 6, 50, 150, 750, 150, 750, 600, 50, 600);
+            background(255, 255, 192);
             answers[2] = playerVoiceRec.resultString;
             textSize(64);
             textAlign(CENTER);
@@ -237,50 +214,47 @@ function answerRecord() {
 
 }
 
-
+// Records the player's questions and writes them on the screen alongside an answer
 function knowledgeChecks() {
 
     if (state === `knowledgeTest1`) {
         if (playerVoiceRec.resultValue == true) {
-            fill(192, 255, 192);
-            animS.quad(rectangles[3], FRAME_RATE * 6, 50, 150, 750, 150, 750, 600, 50, 600);
+            background(255, 255, 192);
             textSize(64);
             textAlign(CENTER);
             questions[0] = playerVoiceRec.resultString;
-            text(questions[0], width / 2.5, height / 2.5);
+            text(questions[0], width / 2, height / 2.5);
             knowledgeCheckAnswer = random(answers);
             textSize(64);
-            text(knowledgeCheckAnswer, width / 2, height / 2);
+            text(knowledgeCheckAnswer, width / 2, height / 1.8);
             nextQuestion();
         }
     }
 
     if (state === `knowledgeTest2`) {
         if (playerVoiceRec.resultValue == true) {
-            fill(192, 255, 192);
-            animS.quad(rectangles[4], FRAME_RATE * 6, 50, 150, 750, 150, 750, 600, 50, 600);
+            background(255, 255, 192);
             textSize(64);
             textAlign(CENTER);
             questions[1] = playerVoiceRec.resultString;
-            text(questions[1], width / 2.5, height / 2.5);
+            text(questions[1], width / 2, height / 2.5);
             textSize(64);
             knowledgeCheckAnswer = random(answers);
-            text(knowledgeCheckAnswer, width / 2, height / 2);
+            text(knowledgeCheckAnswer, width / 2, height / 1.8);
             nextQuestion();
         }
     }
 
     if (state === `knowledgeTest3`) {
         if (playerVoiceRec.resultValue == true) {
-            fill(192, 255, 192);
-            animS.quad(rectangles[5], FRAME_RATE * 6, 50, 150, 750, 150, 750, 600, 50, 600);
+            background(255, 255, 192);
             textSize(64);
             textAlign(CENTER);
             questions[2] = playerVoiceRec.resultString;
-            text(questions[2], width / 2.5, height / 2.5);
+            text(questions[2], width / 2, height / 2.5);
             textSize(64);
             knowledgeCheckAnswer = random(answers);
-            text(knowledgeCheckAnswer, width / 2, height / 2);
+            text(knowledgeCheckAnswer, width / 2, height / 1.8);
             nextQuestion();
         }
     }
@@ -370,42 +344,16 @@ function keyPressed() {
 
 }
 
-
-function resetProgram() {
-
-    if (!playerVoiceRec.resultValue) {
-        return;
-    }
-
-    for (let command of commands) {
-        if (playerVoiceRec.resultString.toLowerCase() === command.command) {
-            // We have a match, execute the corresponding callback
-            command.callback();
-            break;
-        }
-    }
-
-
-    if (state === `introduction`) {
-        voice.speak(`Why would I reset ? We are already at the beginning.`);
-    }
-
-    else {
-        voice.speak(`Resetting.`);
-        setTimeout(() => { state = `introduction` }, 2000);
-    }
-
-}
-
+// Draws the ending screen
 function endScreen() {
     // Draws the end screen
+    image(bgImage, width / 2, height / 2, 800, 800)
+    fill(255, 255, 255)
+    animS.quad(rectangles[1], FRAME_RATE * 6, 10, 350, 790, 350, 790, 420, 10, 420);
     textAlign(CENTER);
     textSize(34);
-    fill(200, 200, 200);
-    animS.quad(rectangles[6], FRAME_RATE * 6, 50, 150, 750, 150, 750, 600, 50, 600);
+    fill(0, 0, 0);
     text(`You've taught the robot how to speak like a human!`, width / 2, height / 2);
-    animS.reset();
-    // bgMusic.stop();
-    // noLoop();
+    voice.stop()
 }
 
