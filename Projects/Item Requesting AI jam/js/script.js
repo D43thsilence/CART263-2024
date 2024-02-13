@@ -18,17 +18,16 @@ let cocossd;
 // The current set of predictions made by CocoSsd once it's running
 let predictions = [];
 
-// Creates an array that contains all of the possible items that the program could request
-let possibleItemsList = [];
-let possibleItemsListSize = [];
-
 // Creates an array to store the items that the program requests
-let itemsList = [];
+let itemsList = [``];
 let itemListSize = 4;
 
 // Sets the framerate and the ID used for the animation
 const FRAME_RATE = 30
 let listNote
+
+// The current top result as predicted by the classifier
+let topResult = undefined;
 
 /**
 Starts the webcam and the ObjectDetector
@@ -52,6 +51,10 @@ function setup() {
 
   // Selects the items to acquire to complete the request
   itemSelection()
+  console.log(itemsList[0])
+console.log(itemsList[1])
+console.log(itemsList[2])
+console.log(itemsList[3])
 
 }
 
@@ -67,6 +70,12 @@ function gotResults(err, results) {
   else {
     predictions = results;
   }
+
+  // Otherwise, if there are results, get the first result in the array!
+  // if (results.length > 0) {
+  //   topResult = results[0];
+  // }
+
   // Ask CocoSsd to detect objects again so it's continuous
   cocossd.detect(video, gotResults);
 }
@@ -119,6 +128,12 @@ function running() {
 
   // Displays the list of items to gather to complete the request
   displayItemList()
+  itemsList[0] = 'cell phone'
+  console.log(itemsList[0])
+  console.log(itemsList[1])
+  console.log(itemsList[2])
+  console.log(itemsList[3])
+  itemRecognition()
 
 }
 
@@ -145,7 +160,7 @@ function highlightObject(object) {
 function itemSelection() {
 
   for (let i = 0; i < itemListSize; i++) {
-    itemsList[i] = random(possibleItems);
+    itemsList[i] = random(cocossdObjects);
 };
   
 }
@@ -159,5 +174,71 @@ function displayItemList() {
 //     textAlign(CENTER);
 //     text(itemslist[i], width / 2 + i * 20, height / 2 * 20 );
 // };
+
+}
+
+function itemRecognition() {
+
+  // for (let i = 0; i < itemListSize; i++) {
+    
+  //   if (object.label === itemList[i]) {
+  //   textSize(64);
+  //   textAlign(CENTER);
+  //   text(itemslist[i], width / 2 + i * 20, height / 2 * 20 );
+  //   }
+
+  //   };
+
+for (let i = 0; i < itemListSize; i++) {
+      // Check if there is currently a result to compare with the desire
+      if (topResult) {
+        // Store the true/false value of whether the label of the top results is the
+        // same as the stated desire (e.g. they're showing us something that matches
+        // the stated desire)
+        let success = (topResult.label === itemsList[i]);
+        // Display a rectangle around the currently identified object
+        push();
+        noFill();
+        // Give it a green outline if it's a successful object and red otherwise
+        if (success) {
+          stroke(0, 255, 0);
+        }
+        else {
+          stroke(255, 0, 0);
+        }
+        strokeWeight(10);
+        rect(topResult.x, topResult.y, topResult.width, topResult.height);
+        pop();
+    
+        // Store a word indicated success/failure to display
+        let result = ``;
+        if (success) {
+          result = `Yes.`;
+        }
+        else {
+          result = `No.`;
+        }
+    
+        // Display the text in the centre of the rectangle identifying the object
+        push();
+        // Make the text green if successful and red otherwise
+        if (success) {
+          fill(0, 255, 0);
+        }
+        else {
+          fill(255, 0, 0);
+        }
+        textAlign(CENTER, CENTER);
+        textSize(32);
+        textStyle(BOLD);
+        text(result, topResult.x + topResult.width / 2, topResult.y + topResult.height / 2);
+        pop();
+    
+        // If this was a successful object, then stop the program so they can enjoy their victory
+        if (success) {
+          noLoop();
+        }
+      }
+    }
 
 }
