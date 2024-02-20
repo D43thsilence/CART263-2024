@@ -7,7 +7,7 @@ In this program, you must show to the camera the objects that the program asks y
 
 "use strict";
 
-// Current state of program
+// Sets the initial state of program
 let state = `loading`; // loading, running
 // User's webcam
 let video;
@@ -25,7 +25,7 @@ let itemsAcquired = []
 
 // Sets the framerate and the ID used for the animation
 const FRAME_RATE = 30
-let listNote
+let listNote;
 
 // The current top result as predicted by the classifier
 let topResult = undefined;
@@ -50,13 +50,8 @@ function setup() {
     state = `running`;
   });
 
-  // Selects the items to acquire to complete the request
+  // Selects the items te robot will ask for the user to acquire to complete the request
   itemSelection()
-  console.log(itemsList[0])
-  console.log(itemsList[1])
-  console.log(itemsList[2])
-  console.log(itemsList[3])
-
 }
 
 /**
@@ -77,15 +72,18 @@ function gotResults(err, results) {
 }
 
 /**
-Handles the two states of the program: loading, running
+Handles the three states of the program: loading, requesting and running
 */
 function draw() {
   if (state === `loading`) {
     loading();
   }
+  else if (state === `requesting`) {
+    requesting();
+  }
   else if (state === `running`) {
     running();
-    // requestComplete()
+    // requestComplete();
   }
 }
 
@@ -101,6 +99,15 @@ function loading() {
   textAlign(CENTER, CENTER);
   text(`Loading ${modelName}...`, width / 2, height / 2);
   pop();
+}
+
+function requesting() {
+  background(0, 0, 0)
+  textSize(32);
+  textStyle(BOLD);
+  textAlign(CENTER, CENTER);
+  text(`Bring the requested items I need.`, width / 2, height / 2);
+  setTimeout(() => state = `running`, 2000);
 }
 
 /**
@@ -124,17 +131,11 @@ function running() {
   }
 
   // Displays the list of items to gather to complete the request
-  itemsList[0] = 'cell phone'
-  itemsList[1] = 'cell phone'
-  itemsList[2] = 'cell phone'
-  itemsList[3] = 'cell phone'
-  displayItemList()
-
-  console.log(itemsList[0])
-  console.log(itemsList[1])
-  console.log(itemsList[2])
-  console.log(itemsList[3])
-
+  // itemsList[0] = 'cell phone'
+  // itemsList[1] = 'cell phone'
+  // itemsList[2] = 'cell phone'
+  // itemsList[3] = 'cell phone'
+  displayItemList();
 }
 
 /**
@@ -157,8 +158,7 @@ function highlightObject(object) {
       stroke(0, 255, 0);
       rect(object.x, object.y, object.width, object.height);
       pop();
-      itemsAcquired[i] = true
-      console.log(itemsAcquired[0])
+      itemsAcquired[i] = true;
     }
   }
 
@@ -175,38 +175,50 @@ function highlightObject(object) {
 
 }
 
+// Randomly selects the items that the robot will request the user to bring
 function itemSelection() {
 
   for (let i = 0; i < itemListSize; i++) {
-    itemsList[i] = random(cocossdObjects);
+    let randomObject = random(cocossdObjects);
+    for (let j = 0; j < itemsList.length; j++) {
+      while (randomObject === itemsList[j]) {
+        randomObject = random(cocossdObjects);
+      }
+    }
+    itemsList[i] = randomObject;
   };
 }
 
+// Displays the list of items that the robot requested
 function displayItemList() {
-  push()
+  // Animates the drawing of rectangle in which the names of the requested items will be written
+  push();
   fill(255, 255, 255);
-  animS.quad(listNote, FRAME_RATE * 6, 10, 20, 200, 20, 200, 150, 10, 150);
-  pop()
+  animS.quad(listNote, FRAME_RATE * 6, 10, 20, 200, 20, 200, 110, 10, 110);
+  pop();
 
+  // Writes the names of the requested items
   for (let i = 0; i < itemListSize; i++) {
     textSize(18);
     fill(0, 0, 0);
     textAlign(CENTER);
-    text(itemsList[i], width / 2 + i * 20, height / 2 * 20);
-    console.log(`hello`)
+    text(itemsList[i], 105, 40 + i * 20);
+    console.log(`hello`);
   };
 
 }
 
+// Swaps the program's state to the end screen when all items are shown to the camera.
 function requestComplete() {
   for (let i = 0; i < itemListSize; i++) {
     if (itemsAcquired[i] === true) {
-      endscreen()
+      endscreen();
     }
   }
 }
 
+// Draws the end screen
 function endscreen() {
-  background(0, 0, 0)
-  noloop()
+  background(0, 0, 0);
+  noloop();
 }
