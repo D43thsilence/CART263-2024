@@ -30,6 +30,9 @@ let listNote;
 // The current top result as predicted by the classifier
 let topResult = undefined;
 
+// Sets up the variable used for speech synthesis
+let voice = new p5.Speech();
+
 /**
 Starts the webcam and the ObjectDetector
 */
@@ -50,8 +53,11 @@ function setup() {
     state = `running`;
   });
 
-  // Selects the items te robot will ask for the user to acquire to complete the request
+  // Selects the items the robot will ask for the user to acquire to complete the request
   itemSelection()
+
+  // Lets the robot ask the user to bring him the requested objects
+  voice.speak(`There are some items that I need. Could you please bring them to me?`);
 }
 
 /**
@@ -72,42 +78,32 @@ function gotResults(err, results) {
 }
 
 /**
-Handles the three states of the program: loading, requesting and running
+Handles the two states of the program: loading and running
 */
 function draw() {
   if (state === `loading`) {
     loading();
   }
-  else if (state === `requesting`) {
-    requesting();
-  }
+
   else if (state === `running`) {
     running();
-    // requestComplete();
+    requestComplete();
   }
 }
 
 /**
-Displays a simple loading screen with the loading model's name
+Displays a simple loading screen at the beginning of the program
 */
 function loading() {
   background(255);
 
   push();
-  textSize(32);
+  textFont(`Kode Mono`)
+  textSize(20);
   textStyle(BOLD);
   textAlign(CENTER, CENTER);
-  text(`Loading ${modelName}...`, width / 2, height / 2);
+  text(`Please wait for my object detection module to load.`, width / 2, height / 2);
   pop();
-}
-
-function requesting() {
-  background(0, 0, 0)
-  textSize(32);
-  textStyle(BOLD);
-  textAlign(CENTER, CENTER);
-  text(`Bring the requested items I need.`, width / 2, height / 2);
-  setTimeout(() => state = `running`, 2000);
 }
 
 /**
@@ -131,15 +127,11 @@ function running() {
   }
 
   // Displays the list of items to gather to complete the request
-  // itemsList[0] = 'cell phone'
-  // itemsList[1] = 'cell phone'
-  // itemsList[2] = 'cell phone'
-  // itemsList[3] = 'cell phone'
   displayItemList();
 }
 
 /**
-Provided with a detected object it draws a box around it and includes its
+Draws a box around detected objects and includes its
 label and confidence value
 */
 function highlightObject(object) {
@@ -162,8 +154,7 @@ function highlightObject(object) {
     }
   }
 
-
-  // Display the label and confidence in the center of the box
+  // Displays the object's label and confidence in the center of the box
   push();
   textSize(18);
   fill(255, 255, 0);
@@ -171,11 +162,9 @@ function highlightObject(object) {
   text(`${object.label}, ${object.confidence.toFixed(2)}`, object.x + object.width / 2, object.y + object.height / 2);
   pop();
 
-
-
 }
 
-// Randomly selects the items that the robot will request the user to bring
+// Randomly selects the items that the robot will request the user to bring while making sure there are no duplicates
 function itemSelection() {
 
   for (let i = 0; i < itemListSize; i++) {
@@ -194,21 +183,21 @@ function displayItemList() {
   // Animates the drawing of rectangle in which the names of the requested items will be written
   push();
   fill(255, 255, 255);
-  animS.quad(listNote, FRAME_RATE * 6, 10, 20, 200, 20, 200, 110, 10, 110);
+  animS.quad(listNote, FRAME_RATE * 2, 10, 20, 200, 20, 200, 110, 10, 110);
   pop();
 
   // Writes the names of the requested items
   for (let i = 0; i < itemListSize; i++) {
+    textFont(`Kode Mono`)
     textSize(18);
     fill(0, 0, 0);
     textAlign(CENTER);
     text(itemsList[i], 105, 40 + i * 20);
-    console.log(`hello`);
   };
 
 }
 
-// Swaps the program's state to the end screen when all items are shown to the camera.
+// Swaps the program's state to the end screen when all the requested items are shown to the camera.
 function requestComplete() {
   for (let i = 0; i < itemListSize; i++) {
     if (itemsAcquired[i] === true) {
@@ -220,5 +209,15 @@ function requestComplete() {
 // Draws the end screen
 function endscreen() {
   background(0, 0, 0);
+  textFont(`Kode Mono`)
+  textSize(20);
+  fill(255, 255, 255);
+  textAlign(CENTER);
+  text(`Good Job! You found the items the robot needed!`, width / 2, height / 2);
+
+  // Allows the robot to thank the user
+  voice.speak(`Thank you for bringing me what I need`);
+
+  // Stops the program from looping
   noloop();
 }
