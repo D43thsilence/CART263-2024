@@ -27,8 +27,10 @@ class Boot extends Phaser.Scene {
         // - The path to the image asset
         // EXAMPLE: https://phaser.io/examples/v3/view/loader/image/load-image
         // https://labs.phaser.io/view.html?src=src\loader\loader%20events\load%20progress.js
-        // this.load.setPath('assets/images/');
-        // this.load.image(`wall`, `assets/images/wall.png`);
+
+        // Loads the images
+        this.load.setPath('assets/images/');
+        this.load.image(`playerCharacter`, `Neutral Character Sprite.png`);
 
         // NOTE: now that we're loading an actual file, we need to wait until everything
         // loads before switching to the next scene. We use the "complete" event listener

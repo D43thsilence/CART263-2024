@@ -5,39 +5,6 @@ class TitleScreen extends Phaser.Scene {
         });
     }
 
-    preload() {
-        this.load.on('progress', value => {
-
-            progress.clear();
-            progress.fillStyle(0xffffff, 1);
-            progress.fillRect(0, 270, 800 * value, 60);
-
-        });
-
-        // NOTE: we use special loading methods to load files into our program
-        // Here we're using the special "load" property of the scene to load
-        // a simple image. The parameters are
-        // - The "key" we will use to refer to this asset later
-        // - The path to the image asset
-        // EXAMPLE: https://phaser.io/examples/v3/view/loader/image/load-image
-        // https://labs.phaser.io/view.html?src=src\loader\loader%20events\load%20progress.js
-        // this.load.setPath('assets/images/');
-        // this.load.image(`wall`, `assets/images/wall.png`);
-        // this.load.spritesheet('explosion', 'assets/images/explosion.png', { frameWidth: 64, frameHeight: 64, endFrame: 23 });
-
-        // NOTE: now that we're loading an actual file, we need to wait until everything
-        // loads before switching to the next scene. We use the "complete" event listener
-        // of the loader to do this.
-        // Note the use of an ARROW FUNCTION so that we can still use "this" correctly
-        // inside the event handler!
-        // EXAMPLE: https://phaser.io/examples/v3/view/loader/loader-events/load-progress
-        this.load.on(`complete`, () => {
-            // this.add.image(400, 400, `TitleScreen`);
-        });
-
-        // this.load.image('titleImage', 'assets/images/taikodrummaster.jpg');
-    }
-
     create() {
         // NOTE: Creating and adding a text object to our scene
         // EXAMPLE: https://phaser.io/examples/v3/view/game-objects/text/basic-text
@@ -68,7 +35,7 @@ class TitleScreen extends Phaser.Scene {
 
         // NOTE: Switch to the scene with the key of "play"
         // EXAMPLE: https://phaser.io/examples/v3/view/scenes/change-scene-from-create
-        // this.scene.start(`Play`);
+        this.scene.start(`Play`);
         const keys = this.textures.getTextureKeys();
 
         for (let i = 0; i < keys.length; i++) {
