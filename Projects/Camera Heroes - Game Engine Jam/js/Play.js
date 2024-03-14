@@ -30,6 +30,14 @@ class Play extends Phaser.Scene {
         // into a property of the scene if you might want to manipulate it
         // at some later point in your program!
 
+        // Creates the stage where the game is played
+        this.floor = this.add.tileSprite(400, 300, 500, 500, 'floorTile');
+        this.floor.setScale(1.2);
+
+        this.wall = this.add.tileSprite(320, 320, 320, 320, 'wallTile');
+        this.wall.setScale(1.2);
+
+
         // Creates all the player avatars
         this.avatar = this.physics.add.sprite(0, 0, `playerCharacter`);
         // Set up a max velocity you can reach through accelerating
@@ -118,6 +126,7 @@ class Play extends Phaser.Scene {
         // Otherwise stop rotating
         else {
             this.avatar.setGravityX(0);
+            this.avatar.setVelocityX(0);
         }
 
         // If the up key is pressed, accelerate in the current rotation direction

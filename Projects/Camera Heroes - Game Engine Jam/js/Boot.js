@@ -31,7 +31,8 @@ class Boot extends Phaser.Scene {
         // Loads the images
         this.load.setPath('assets/images/');
         this.load.image(`playerCharacter`, `Neutral Character Sprite.png`);
-
+        this.load.image(`floorTile`, `Floor Tile.png`);
+        this.load.image(`wallTile`, `Wall Tile.png`);
         // NOTE: now that we're loading an actual file, we need to wait until everything
         // loads before switching to the next scene. We use the "complete" event listener
         // of the loader to do this.
