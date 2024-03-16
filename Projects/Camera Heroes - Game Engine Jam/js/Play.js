@@ -31,35 +31,41 @@ class Play extends Phaser.Scene {
         // at some later point in your program!
 
         // Creates the stage where the game is played
-        this.floor = this.add.tileSprite(400, 300, 500, 500, 'floorTile');
+        this.floor = this.add.tileSprite(800, 300, 1600, 600, 'floorTile');
         this.floor.setScale(1.2);
 
         this.wall = this.add.tileSprite(320, 320, 320, 320, 'wallTile');
         this.wall.setScale(1.2);
 
+        // this.wall.setImmovable(true);
+
+        // Manages the collisions between the players and the camera
+        // this.physics.add.collider(this.avatar, this.wall);
+
+        // Manages the collecting of items
+        // this.physics.add.overlap(this.avatar, this.collectable, this.collectItem, null, this);
 
         // Creates all the player avatars
         this.avatar = this.physics.add.sprite(0, 0, `playerCharacter`);
         // Set up a max velocity you can reach through accelerating
         this.avatar.speed = 500;
-        this.avatar.setMaxVelocity(200, 200);
-        this.avatar.setTint(0xdd3333)
+        this.avatar.setMaxVelocity(300, 300);
+        this.avatar.setTint(0xdd3333);
 
         this.avatar2 = this.physics.add.sprite(0, 0, `playerCharacter`);
         // Set up a max velocity you can reach through accelerating
-        this.avatar2.speed = 500;
-        this.avatar2.setMaxVelocity(200, 200);
-        this.avatar2.setTint(0xdd4444)
+        this.avatar2.setMaxVelocity(300, 300);
+        this.avatar2.setTint(0xdd3333);
 
         this.avatar3 = this.physics.add.sprite(0, 0, `playerCharacter`);
         // Set up a max velocity you can reach through accelerating
         this.avatar3.setMaxVelocity(200, 200);
-        this.avatar3.setTint(0xdd3333)
+        this.avatar3.setTint(0x3333dd);
 
         this.avatar4 = this.physics.add.sprite(0, 0, `playerCharacter`);
         // Set up a max velocity you can reach through accelerating
         this.avatar4.setMaxVelocity(200, 200);
-        this.avatar4.setTint(0xdd3333)
+        this.avatar4.setTint(0x3333dd);
 
         this.playerCharacter = this.add.sprite(400, 300, 'playerCharacterMoving');
         this.playerCharacter.setTint(0xdd3333)
@@ -68,9 +74,6 @@ class Play extends Phaser.Scene {
 
         // this.playerCharacter.play('character-moving')
 
-        // Add colliders between the avatar and the sadness, and the sadness and itself
-        // so that we get physics for free!
-        this.physics.add.collider(this.avatar, this.sadness);
 
         // Create our basic controls
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -90,10 +93,16 @@ class Play extends Phaser.Scene {
         cam3.startFollow(this.avatar3, false, 0.1, 0.1);
         cam4.startFollow(this.avatar4, false, 0.05, 0.05);
 
+        this.cameras.main.setBounds(0, 0, 800 * 1.5, 600);
+        cam2.setBounds(800 * 1.5, 0, 800 * 4, 600);
+        cam3.setBounds(0, 0, 800 * 2, 600);
+        cam4.setBounds(0, 0, 800 * 2, 600);
 
         // Sets the bounds of the world
-        // this.physics.world.setBounds(0, 0, 1920 * 2, 1080 * 2);
-        // this.player.setCollideWorldBounds(true);
+
+        this.physics.world.setBounds(0, 0, 800 * 3, 600);
+        this.avatar.setCollideWorldBounds(true);
+        this.avatar2.setCollideWorldBounds(true);
 
     }
 
@@ -139,8 +148,10 @@ class Play extends Phaser.Scene {
         }
         else {
             this.avatar.setGravityY(0);
+            this.avatar.setVelocityY(0);
         }
 
+        // Sets avatar2's movement
         // If either left or right is pressed, rotate appropriately
         if (this.cursors.left.isDown) {
             this.avatar2.setGravityX(-this.avatar.speed);
@@ -151,6 +162,7 @@ class Play extends Phaser.Scene {
         // Otherwise stop rotating
         else {
             this.avatar2.setGravityX(0);
+            this.avatar2.setVelocityX(0);
         }
 
         // If the up key is pressed, accelerate in the current rotation direction
@@ -163,6 +175,7 @@ class Play extends Phaser.Scene {
         }
         else {
             this.avatar2.setGravityY(0);
+            this.avatar2.setVelocityY(0);
         }
     }
 
