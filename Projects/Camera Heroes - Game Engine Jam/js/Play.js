@@ -14,7 +14,7 @@ class Play extends Phaser.Scene {
         const wallsLayer = map.createLayer('Walls', tileset, 0, 0)
         const aboveLayer = map.createLayer('Above Ground', tileset, 0, 0)
 
-        // Manages the collisions between the players and the level
+        // Creates the collisions between the players and the level
         wallsLayer.setCollisionByProperty({ collides: true })
 
         // Manages the collectable items
@@ -24,14 +24,6 @@ class Play extends Phaser.Scene {
             quantity: 9
         });
 
-        const debugGraphics = this.add.graphics().setAlpha(0.7)
-        wallsLayer.renderDebug(debugGraphics, {
-            tilecolor: null,
-            collidingTileColor: new Phaser.Display.Color(243, 234, 48, 255),
-            faceColor: new Phaser.Display.Color(40, 39, 37, 255)
-        })
-
-
         // Creates all the player avatars
         this.avatar = this.physics.add.sprite(90, 340, `playerCharacter`);
         this.avatar.scale = 0.4
@@ -39,6 +31,7 @@ class Play extends Phaser.Scene {
         this.avatar.speed = 500;
         this.avatar.setMaxVelocity(130, 130);
         this.avatar.setTint(0xdd3333);
+        this.physics.add.collider(this.avatar, wallsLayer)
 
         this.avatar2 = this.physics.add.sprite(90, 380, `playerCharacter`);
         this.avatar2.scale = 0.4
@@ -46,6 +39,7 @@ class Play extends Phaser.Scene {
         this.avatar2.speed = 500;
         this.avatar2.setMaxVelocity(130, 130);
         this.avatar2.setTint(0x3333dd);
+        this.physics.add.collider(this.avatar2, wallsLayer)
 
 
         // this.playerCharacter = this.add.sprite(400, 300, 'playerCharacterMoving');
@@ -122,7 +116,7 @@ class Play extends Phaser.Scene {
 
     handleInput() {
 
-        // Handles player 1's movement and the attacks of both players
+        // Handles player 1's movement and the size changes and attacks of both players
         this.input.keyboard.on('keydown', event => {
 
             if (event.keyCode === 87) {
@@ -140,12 +134,32 @@ class Play extends Phaser.Scene {
                 this.avatar.setGravityX(this.avatar.speed);
             }
 
-            // Triggers player 1's attack
+            // Makes P1 smaller using the e key
+            else if (event.keyCode === 82) {
+                this.avatar.scale = 0.2
+            }
+
+            // Returns P1 to the original size using the r key
+            else if (event.keyCode === 84) {
+                this.avatar.scale = 0.4
+            }
+
+            // Makes P2 smaller using the u key
+            else if (event.keyCode === 73) {
+                this.avatar2.scale = 0.2
+            }
+
+            // Returns P2 to the original size using the i key
+            else if (event.keyCode === 79) {
+                this.avatar2.scale = 0.4
+            }
+
+            // Triggers player 1's attack using the f key
             else if (event.keyCode === 70) {
                 // this.avatar.anims.play('avatar attack')
             }
 
-            // Triggers player 2's attack
+            // Triggers player 2's attack using the k key
             else if (event.keyCode === 75) {
                 // this.avatar2.anims.play('avatar attack')
             }
