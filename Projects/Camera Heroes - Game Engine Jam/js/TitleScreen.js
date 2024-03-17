@@ -39,7 +39,7 @@ class TitleScreen extends Phaser.Scene {
         // Create a string that describes an amazing game experience!
         let gameDescription = `Camera Heroes!`;
         let gameInstructions = `Use the arrow keys and movement keys to move both characters.`;
-        let gameInstructions2 = `Pick up the weapons in the dungeon (P1 = F to swing, P2: l to swing)`;
+        let gameInstructions2 = `Pick up the weapons in the dungeon (P1 = F to swing, P2: k to swing)`;
         let gameInstructions3 = `Your objective is to destroy the maleficient rune!`;
         let startInstruction = `Click to start!`;
         // Create the text object that will actually add the text into our

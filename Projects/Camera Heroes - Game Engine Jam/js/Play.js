@@ -37,20 +37,21 @@ class Play extends Phaser.Scene {
         this.avatar.scale = 0.4
         // Set up a max velocity you can reach through accelerating
         this.avatar.speed = 500;
-        this.avatar.setMaxVelocity(300, 300);
+        this.avatar.setMaxVelocity(130, 130);
         this.avatar.setTint(0xdd3333);
 
         this.avatar2 = this.physics.add.sprite(90, 380, `playerCharacter`);
         this.avatar2.scale = 0.4
         // Set up a max velocity you can reach through accelerating
         this.avatar2.speed = 500;
-        this.avatar2.setMaxVelocity(200, 200);
+        this.avatar2.setMaxVelocity(130, 130);
         this.avatar2.setTint(0x3333dd);
 
 
-        this.playerCharacter = this.add.sprite(400, 300, 'playerCharacterMoving');
-        this.playerCharacter.setTint(0xdd3333)
+        // this.playerCharacter = this.add.sprite(400, 300, 'playerCharacterMoving');
+        // this.playerCharacter.setTint(0xdd3333)
 
+        // Creates the animations used in the program
         this.createAnimations();
 
         // this.playerCharacter.play('character-moving')
@@ -58,7 +59,6 @@ class Play extends Phaser.Scene {
 
         // Create our basic controls
         this.cursors = this.input.keyboard.createCursorKeys();
-
 
 
         // Sets up the various cameras in the game
@@ -121,51 +121,76 @@ class Play extends Phaser.Scene {
     }
 
     handleInput() {
-        // If either left or right is pressed, rotate appropriately
-        if (this.cursors.left.isDown) {
-            this.avatar.setGravityX(-this.avatar.speed);
-        }
-        else if (this.cursors.right.isDown) {
-            this.avatar.setGravityX(this.avatar.speed);
-        }
-        // Otherwise stop rotating
-        else {
-            this.avatar.setGravityX(0);
-            this.avatar.setVelocityX(0);
-        }
 
-        // If the up key is pressed, accelerate in the current rotation direction
-        if (this.cursors.up.isDown) {
-            this.avatar.setGravityY(-this.avatar.speed);
-        }
-        // Otherwise, zero the acceleration
-        else if (this.cursors.down.isDown) {
-            this.avatar.setGravityY(this.avatar.speed);
-        }
-        else {
-            this.avatar.setGravityY(0);
-            this.avatar.setVelocityY(0);
-        }
+        // Handles player 1's movement and the attacks of both players
+        this.input.keyboard.on('keydown', event => {
 
-        // Sets avatar2's movement
-        // If either left or right is pressed, rotate appropriately
+            if (event.keyCode === 87) {
+                this.avatar.setGravityY(-this.avatar.speed);
+            }
+            else if (event.keyCode === 83) {
+                this.avatar.setGravityY(this.avatar.speed);
+            }
+
+            else if (event.keyCode === 65) {
+                this.avatar.setGravityX(-this.avatar.speed);
+            }
+
+            else if (event.keyCode === 68) {
+                this.avatar.setGravityX(this.avatar.speed);
+            }
+
+            // Triggers player 1's attack
+            else if (event.keyCode === 70) {
+                // this.avatar.anims.play('avatar attack')
+            }
+
+            // Triggers player 2's attack
+            else if (event.keyCode === 75) {
+                // this.avatar2.anims.play('avatar attack')
+            }
+        });
+
+        // Makes player 1 stop moving when the movement keys are released
+        this.input.keyboard.on('keyup', event => {
+
+            if (event.keyCode === 87) {
+                this.avatar.setGravityY(0);
+                this.avatar.setVelocityY(0);
+            }
+            else if (event.keyCode === 83) {
+                this.avatar.setGravityY(0);
+                this.avatar.setVelocityY(0);
+            }
+
+            else if (event.keyCode === 65) {
+                this.avatar.setGravityX(0);
+                this.avatar.setVelocityX(0);
+            }
+
+            else if (event.keyCode === 68) {
+                this.avatar.setGravityX(0);
+                this.avatar.setVelocityX(0);
+            }
+        });
+
+        // Manages Player 2's movement and attack
         if (this.cursors.left.isDown) {
             this.avatar2.setGravityX(-this.avatar.speed);
         }
         else if (this.cursors.right.isDown) {
             this.avatar2.setGravityX(this.avatar.speed);
         }
-        // Otherwise stop rotating
+
         else {
             this.avatar2.setGravityX(0);
             this.avatar2.setVelocityX(0);
         }
 
-        // If the up key is pressed, accelerate in the current rotation direction
         if (this.cursors.up.isDown) {
             this.avatar2.setGravityY(-this.avatar.speed);
         }
-        // Otherwise, zero the acceleration
+
         else if (this.cursors.down.isDown) {
             this.avatar2.setGravityY(this.avatar.speed);
         }
@@ -173,6 +198,9 @@ class Play extends Phaser.Scene {
             this.avatar2.setGravityY(0);
             this.avatar2.setVelocityY(0);
         }
+
+
+
     }
 
 
