@@ -6,30 +6,6 @@ class Play extends Phaser.Scene {
     }
 
     create() {
-        // NOTE: Creating and adding a text object to our scene
-        // EXAMPLE: https://phaser.io/examples/v3/view/game-objects/text/basic-text
-        // Create a style object to define what the text will look like
-        let style = {
-            // Use font-family in the same way you use it in CSS
-            fontFamily: `sans-serif`,
-            // And font size too!
-            fontSize: `40px`,
-            // Set a fill color for the text (white)
-            fill: `#ffffff`,
-        };
-        // Create a string that describes an amazing game experience!
-        let gameDescription = `Current Game`;
-        // Create the text object that will actually add the text into our
-        // scene and display it. The parameters here are:
-        // - x position
-        // - y position
-        // - string to display
-        // - style configuration
-        this.gameText = this.add.text(100, 100, gameDescription, style);
-        // Note that it's often a good idea to assign the resulting text object
-        // into a property of the scene if you might want to manipulate it
-        // at some later point in your program!
-
         // Creates the stage where the game is played
 
         const map = this.make.tilemap({ key: `dungeon` })
@@ -38,8 +14,8 @@ class Play extends Phaser.Scene {
         const wallsLayer = map.createLayer('Walls', tileset, 0, 0)
         const aboveLayer = map.createLayer('Above Ground', tileset, 0, 0)
 
-        // Manages the collisions between the players and the camera
-        // this.physics.add.collider(this.avatar, this.wall);
+        // Manages the collisions between the players and the level
+        wallsLayer.setCollisionByProperty({ collides: true })
 
         // Manages the collectable items
         // this.physics.add.overlap(this.avatar, this.collectable, this.collectItem, null, this);
@@ -48,28 +24,29 @@ class Play extends Phaser.Scene {
             quantity: 9
         });
 
+        const debugGraphics = this.add.graphics().setAlpha(0.7)
+        wallsLayer.renderDebug(debugGraphics, {
+            tilecolor: null,
+            collidingTileColor: new Phaser.Display.Color(243, 234, 48, 255),
+            faceColor: new Phaser.Display.Color(40, 39, 37, 255)
+        })
+
 
         // Creates all the player avatars
-        this.avatar = this.physics.add.sprite(0, 0, `playerCharacter`);
+        this.avatar = this.physics.add.sprite(90, 340, `playerCharacter`);
+        this.avatar.scale = 0.4
         // Set up a max velocity you can reach through accelerating
         this.avatar.speed = 500;
         this.avatar.setMaxVelocity(300, 300);
         this.avatar.setTint(0xdd3333);
 
-        this.avatar2 = this.physics.add.sprite(0, 0, `playerCharacter`);
+        this.avatar2 = this.physics.add.sprite(90, 380, `playerCharacter`);
+        this.avatar2.scale = 0.4
         // Set up a max velocity you can reach through accelerating
-        this.avatar2.setMaxVelocity(300, 300);
-        this.avatar2.setTint(0xdd3333);
+        this.avatar2.speed = 500;
+        this.avatar2.setMaxVelocity(200, 200);
+        this.avatar2.setTint(0x3333dd);
 
-        this.avatar3 = this.physics.add.sprite(0, 0, `playerCharacter`);
-        // Set up a max velocity you can reach through accelerating
-        this.avatar3.setMaxVelocity(200, 200);
-        this.avatar3.setTint(0x3333dd);
-
-        this.avatar4 = this.physics.add.sprite(0, 0, `playerCharacter`);
-        // Set up a max velocity you can reach through accelerating
-        this.avatar4.setMaxVelocity(200, 200);
-        this.avatar4.setTint(0x3333dd);
 
         this.playerCharacter = this.add.sprite(400, 300, 'playerCharacterMoving');
         this.playerCharacter.setTint(0xdd3333)
@@ -85,17 +62,17 @@ class Play extends Phaser.Scene {
 
 
         // Sets up the various cameras in the game
-        this.cameras.main.setSize(400, 320);
+        this.cameras.main.setSize(200, 160);
 
-        const cam2 = this.cameras.add(400, 0, 400, 320);
-        const cam3 = this.cameras.add(0, 320, 400, 320);
-        const cam4 = this.cameras.add(400, 320, 400, 320);
+        const cam2 = this.cameras.add(200, 0, 200, 160);
+        const cam3 = this.cameras.add(0, 160, 200, 160);
+        const cam4 = this.cameras.add(200, 160, 200, 160);
 
-        this.cameras.main.startFollow(this.avatar);
+        this.cameras.main.startFollow(this.avatar, 0.1, 0.1);
 
-        cam2.startFollow(this.avatar2, false, 0.5, 0.5);
-        cam3.startFollow(this.avatar3, false, 0.1, 0.1);
-        cam4.startFollow(this.avatar4, false, 0.05, 0.05);
+        cam2.startFollow(this.avatar, false, 0.1, 0.1);
+        cam3.startFollow(this.avatar2, false, 0.1, 0.1);
+        cam4.startFollow(this.avatar2, false, 0.1, 0.1);
 
         this.cameras.main.setBounds(0, 0, 800, 640);
         cam2.setBounds(800, 0, 800, 640);
@@ -103,7 +80,6 @@ class Play extends Phaser.Scene {
         cam4.setBounds(800, 0, 800, 640);
 
         // Sets the bounds of the world
-
         this.physics.world.setBounds(0, 0, 800 * 2, 640);
         this.avatar.setCollideWorldBounds(true);
         this.avatar2.setCollideWorldBounds(true);
@@ -121,15 +97,26 @@ class Play extends Phaser.Scene {
         item.destroy();
     }
 
+    collectItem(avatar2, item) {
+        item.destroy();
+    }
+
+    // Creates the attack animations
     createAnimations() {
 
         // this.anims.create({
-        //     key: 'character-moving',
-        //     frames: this.anims.generateFrameNumbers('character-moving, { start: 0, end: 23, first: 23 }),
+        //     key: 'avatar attack',
+        //     frames: this.anims.generateFrameNumbers('avatar1-attacking, { start: 0, end: 23, first: 23 }),
         //     frameRate: 20,
         //     repeat: -1
         // });
 
+        // this.anims.create({
+        //     key: 'avatar2 attack',
+        //     frames: this.anims.generateFrameNumbers('avatar2-attacking, { start: 0, end: 23, first: 23 }),
+        //     frameRate: 20,
+        //     repeat: -1
+        // });
 
     }
 
