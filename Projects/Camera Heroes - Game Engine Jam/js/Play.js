@@ -17,13 +17,6 @@ class Play extends Phaser.Scene {
         // Creates the collisions between the players and the level
         wallsLayer.setCollisionByProperty({ collides: true })
 
-        // Manages the collectable items
-        // this.physics.add.overlap(this.avatar, this.collectable, this.collectItem, null, this);
-        this.collectables = this.physics.add.group({
-            key: 'wall',
-            quantity: 9
-        });
-
         // Creates all the player avatars
         this.avatar = this.physics.add.sprite(90, 340, `playerCharacter`);
         this.avatar.scale = 0.4
@@ -44,6 +37,14 @@ class Play extends Phaser.Scene {
 
         // this.playerCharacter = this.add.sprite(400, 300, 'playerCharacterMoving');
         // this.playerCharacter.setTint(0xdd3333)
+
+        // Creates and manages the collectable items
+        this.heroSword = this.physics.add.sprite(1300, 430, `heroSword`);
+        this.heroStaff = this.physics.add.sprite(1300, 100, `heroStaff`);
+
+        // Allows the players to pick up their respective items
+        this.physics.add.overlap(this.avatar, this.heroSword, this.collectSword, null, this);
+        this.physics.add.overlap(this.avatar2, this.heroStaff, this.collectStaff, null, this);
 
         // Creates the animations used in the program
         this.createAnimations();
@@ -86,13 +87,15 @@ class Play extends Phaser.Scene {
 
     }
 
-    // Allows the players to collect Items
-    collectItem(avatar, item) {
+    // Removes the items after the player has collected them
+    collectSword(playerCharacter, item) {
         item.destroy();
+        swordPickup = true
     }
 
-    collectItem(avatar2, item) {
+    collectStaff(playerCharacter, item) {
         item.destroy();
+        staffPickup = true
     }
 
     // Creates the attack animations
@@ -155,13 +158,15 @@ class Play extends Phaser.Scene {
             }
 
             // Triggers player 1's attack using the f key
-            else if (event.keyCode === 70) {
+            else if (event.keyCode === 70 || swordPickup === true) {
                 // this.avatar.anims.play('avatar attack')
+                swordAttack()
             }
 
             // Triggers player 2's attack using the k key
-            else if (event.keyCode === 75) {
+            else if (event.keyCode === 75 || staffPickup === true) {
                 // this.avatar2.anims.play('avatar attack')
+                staffAttack()
             }
         });
 
@@ -212,6 +217,14 @@ class Play extends Phaser.Scene {
             this.avatar2.setGravityY(0);
             this.avatar2.setVelocityY(0);
         }
+
+        // swordAttack() {
+        //     maleficientRuneLifePoints = maleficientRuneLifePoints - 1
+        // }
+
+        // staffAttack() {
+        //     maleficientRuneLifePoints = maleficientRuneLifePoints - 1
+        // }
 
 
 

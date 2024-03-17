@@ -33,6 +33,13 @@ let config = {
     }
 };
 
+// Creates the variables used to keep track of if the items are collected or not
+let swordPickup = false
+let staffPickup = false
+
+// Assigns the amount of life points the maleficient rune has
+let maleficientRuneLifePoints = 10
+
 // Here we actually create the game using this configuration!
 let game = new Phaser.Game(config);
 
