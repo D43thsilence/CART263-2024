@@ -18,7 +18,7 @@ let config = {
     // Though note that we're able to scale the entire game as well
     // if we need to for responsive design
     width: 800,
-    height: 600,
+    height: 640,
     // Because it's so common to include physics in a game, this is how
     // we set up the basic "arcade physics" engine with our game
     physics: {

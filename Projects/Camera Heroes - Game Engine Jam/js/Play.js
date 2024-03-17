@@ -31,19 +31,23 @@ class Play extends Phaser.Scene {
         // at some later point in your program!
 
         // Creates the stage where the game is played
-        this.floor = this.add.tileSprite(800, 300, 1600, 600, 'floorTile');
-        this.floor.setScale(1.2);
 
-        this.wall = this.add.tileSprite(320, 320, 320, 320, 'wallTile');
-        this.wall.setScale(1.2);
-
-        // this.wall.setImmovable(true);
+        const map = this.make.tilemap({ key: `dungeon` })
+        const tileset = map.addTilesetImage(`Game Sprite Sheet`, `tiles`)
+        const groundLayer = map.createLayer('Ground & hidden stuff', tileset, 0, 0)
+        const wallsLayer = map.createLayer('Walls', tileset, 0, 0)
+        const aboveLayer = map.createLayer('Above Ground', tileset, 0, 0)
 
         // Manages the collisions between the players and the camera
         // this.physics.add.collider(this.avatar, this.wall);
 
-        // Manages the collecting of items
+        // Manages the collectable items
         // this.physics.add.overlap(this.avatar, this.collectable, this.collectItem, null, this);
+        this.collectables = this.physics.add.group({
+            key: 'wall',
+            quantity: 9
+        });
+
 
         // Creates all the player avatars
         this.avatar = this.physics.add.sprite(0, 0, `playerCharacter`);
@@ -81,11 +85,11 @@ class Play extends Phaser.Scene {
 
 
         // Sets up the various cameras in the game
-        this.cameras.main.setSize(400, 300);
+        this.cameras.main.setSize(400, 320);
 
-        const cam2 = this.cameras.add(400, 0, 400, 300);
-        const cam3 = this.cameras.add(0, 300, 400, 300);
-        const cam4 = this.cameras.add(400, 300, 400, 300);
+        const cam2 = this.cameras.add(400, 0, 400, 320);
+        const cam3 = this.cameras.add(0, 320, 400, 320);
+        const cam4 = this.cameras.add(400, 320, 400, 320);
 
         this.cameras.main.startFollow(this.avatar);
 
@@ -93,14 +97,14 @@ class Play extends Phaser.Scene {
         cam3.startFollow(this.avatar3, false, 0.1, 0.1);
         cam4.startFollow(this.avatar4, false, 0.05, 0.05);
 
-        this.cameras.main.setBounds(0, 0, 800 * 1.5, 600);
-        cam2.setBounds(800 * 1.5, 0, 800 * 4, 600);
-        cam3.setBounds(0, 0, 800 * 2, 600);
-        cam4.setBounds(0, 0, 800 * 2, 600);
+        this.cameras.main.setBounds(0, 0, 800, 640);
+        cam2.setBounds(800, 0, 800, 640);
+        cam3.setBounds(0, 0, 800, 640);
+        cam4.setBounds(800, 0, 800, 640);
 
         // Sets the bounds of the world
 
-        this.physics.world.setBounds(0, 0, 800 * 3, 600);
+        this.physics.world.setBounds(0, 0, 800 * 2, 640);
         this.avatar.setCollideWorldBounds(true);
         this.avatar2.setCollideWorldBounds(true);
 
@@ -110,6 +114,11 @@ class Play extends Phaser.Scene {
     update() {
         this.handleInput();
 
+    }
+
+    // Allows the players to collect Items
+    collectItem(avatar, item) {
+        item.destroy();
     }
 
     createAnimations() {
