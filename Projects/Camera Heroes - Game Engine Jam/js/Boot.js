@@ -6,8 +6,7 @@ class Boot extends Phaser.Scene {
         });
     }
 
-    // NOTE: we add the preload() method to tell Phaser 3 we want to preload
-    // asset files here
+    // Preloads all assets
     preload() {
 
         const progress = this.add.graphics();
@@ -20,17 +19,10 @@ class Boot extends Phaser.Scene {
 
         });
 
-        // NOTE: we use special loading methods to load files into our program
-        // Here we're using the special "load" property of the scene to load
-        // a simple image. The parameters are
-        // - The "key" we will use to refer to this asset later
-        // - The path to the image asset
-        // EXAMPLE: https://phaser.io/examples/v3/view/loader/image/load-image
-        // https://labs.phaser.io/view.html?src=src\loader\loader%20events\load%20progress.js
-
         // Loads the images
         this.load.setPath('assets/images/');
         this.load.image(`tiles`, `Game Sprite Sheet.png`);
+        this.load.image(`maleficientRune`, `Maleficient Rune.png`);
         this.load.image(`heroSword`, `Hero Sword.png`);
         this.load.image(`heroStaff`, `Hero Staff.png`);
         this.load.image(`heroStaff`, `Hero Staff.png`);

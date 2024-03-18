@@ -17,21 +17,31 @@ class Play extends Phaser.Scene {
         // Creates the collisions between the players and the level
         wallsLayer.setCollisionByProperty({ collides: true })
 
-        // Creates all the player avatars
-        this.avatar = this.physics.add.sprite(90, 340, `playerCharacter`);
-        this.avatar.scale = 0.4
+        // Creates all the player avatars and their collisions
+        this.avatar = this.physics.add.sprite(150, 270, `playerCharacter`);
+        this.avatar.scale = 0.4;
         this.avatar.speed = 500;
         this.avatar.setMaxVelocity(130, 130);
         this.avatar.setTint(0xdd3333);
-        this.physics.add.collider(this.avatar, wallsLayer)
+        this.physics.add.collider(this.avatar, wallsLayer);
+        this.physics.add.collider(this.avatar, this.maleficientRune);
 
-        this.avatar2 = this.physics.add.sprite(90, 380, `playerCharacter`);
-        this.avatar2.scale = 0.4
+        this.avatar2 = this.physics.add.sprite(150, 420, `playerCharacter`);
+        this.avatar2.scale = 0.4;
         this.avatar2.speed = 500;
         this.avatar2.setMaxVelocity(130, 130);
         this.avatar2.setTint(0x3333dd);
-        this.physics.add.collider(this.avatar2, wallsLayer)
+        this.physics.add.collider(this.avatar2, wallsLayer);
+        this.physics.add.collider(this.avatar2, this.maleficientRune);
 
+        // Creates the Maleficient Rune
+        this.maleficientRune = this.physics.add.sprite(90, 340, `maleficientRune`);
+        this.maleficientRune.scale = 0.9;
+        // Adjusts the collision box of the Maleficient Rune
+        this.maleficientRune.body.setSize(this.maleficientRune.width / 2, this.maleficientRune.height * 0.8)
+        this.maleficientRune.setImmovable(true);
+        this.physics.add.collider(this.maleficientRune, this.avatar);
+        this.physics.add.collider(this.maleficientRune, this.avatar2);
 
         // Creates and manages the collectable items
         this.heroSword = this.physics.add.sprite(1300, 430, `heroSword`);
@@ -95,7 +105,7 @@ class Play extends Phaser.Scene {
     // Continuously checks for player input
     update() {
         this.handleInput();
-
+        this.gameEnd();
     }
 
     // Removes the items after the player has collected them
@@ -215,6 +225,7 @@ class Play extends Phaser.Scene {
 
     }
 
+    // Allows both players to deal damage to the Maleficient Rune
     swordAttack() {
         maleficientRuneLifePoints = maleficientRuneLifePoints - 1
     }
@@ -223,6 +234,11 @@ class Play extends Phaser.Scene {
         maleficientRuneLifePoints = maleficientRuneLifePoints - 1
     }
 
-
+    gameEnd() {
+        console.log(maleficientRuneLifePoints)
+        if (maleficientRuneLifePoints < 0) {
+            this.scene.start(`EndScreen`);
+        }
+    }
 
 }
