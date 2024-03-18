@@ -30,12 +30,20 @@ class Boot extends Phaser.Scene {
 
         // Loads the images
         this.load.setPath('assets/images/');
-        this.load.image(`playerCharacter`, `Neutral Character Sprite.png`);
-        this.load.image(`floorTile`, `Floor Tile.png`);
-        this.load.image(`wallTile`, `Wall Tile.png`);
         this.load.image(`tiles`, `Game Sprite Sheet.png`);
         this.load.image(`heroSword`, `Hero Sword.png`);
         this.load.image(`heroStaff`, `Hero Staff.png`);
+        this.load.image(`heroStaff`, `Hero Staff.png`);
+        this.load.spritesheet(`heroSwing`, `Hero Sword Swing.png`, {
+            frameWidth: 256,
+            frameHeight: 256,
+            endFrame: 10
+        });
+        this.load.spritesheet(`playerCharacter`, `Neutral Character Sprite Sheet.png`, {
+            frameWidth: 64,
+            frameHeight: 64,
+            endFrame: 0
+        });
         this.load.tilemapTiledJSON(`dungeon`, `Dungeon-01.tmj`)
 
         // NOTE: now that we're loading an actual file, we need to wait until everything

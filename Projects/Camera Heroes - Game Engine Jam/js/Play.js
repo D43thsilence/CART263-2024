@@ -20,7 +20,6 @@ class Play extends Phaser.Scene {
         // Creates all the player avatars
         this.avatar = this.physics.add.sprite(90, 340, `playerCharacter`);
         this.avatar.scale = 0.4
-        // Set up a max velocity you can reach through accelerating
         this.avatar.speed = 500;
         this.avatar.setMaxVelocity(130, 130);
         this.avatar.setTint(0xdd3333);
@@ -28,15 +27,11 @@ class Play extends Phaser.Scene {
 
         this.avatar2 = this.physics.add.sprite(90, 380, `playerCharacter`);
         this.avatar2.scale = 0.4
-        // Set up a max velocity you can reach through accelerating
         this.avatar2.speed = 500;
         this.avatar2.setMaxVelocity(130, 130);
         this.avatar2.setTint(0x3333dd);
         this.physics.add.collider(this.avatar2, wallsLayer)
 
-
-        // this.playerCharacter = this.add.sprite(400, 300, 'playerCharacterMoving');
-        // this.playerCharacter.setTint(0xdd3333)
 
         // Creates and manages the collectable items
         this.heroSword = this.physics.add.sprite(1300, 430, `heroSword`);
@@ -46,11 +41,10 @@ class Play extends Phaser.Scene {
         this.physics.add.overlap(this.avatar, this.heroSword, this.collectSword, null, this);
         this.physics.add.overlap(this.avatar2, this.heroStaff, this.collectStaff, null, this);
 
-        // Creates the animations used in the program
+        // Creates the animations used in the program and initiates the character's animations
         this.createAnimations();
-
-        // this.playerCharacter.play('character-moving')
-
+        this.avatar.play('idle animation')
+        this.avatar2.play('idle animation')
 
         // Create our basic controls
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -81,6 +75,23 @@ class Play extends Phaser.Scene {
 
     }
 
+    // Creates the animations
+    createAnimations() {
+        this.anims.create({
+            key: 'idle animation',
+            frames: this.anims.generateFrameNumbers(`playerCharacter`, { start: 0, end: 0, first: 0 }),
+            frameRate: 0,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'avatar attack',
+            frames: this.anims.generateFrameNumbers(`heroSwing`, { start: 0, end: 9, first: 0 }),
+            frameRate: 20,
+            repeat: 0
+        });
+    }
+
     // Continuously checks for player input
     update() {
         this.handleInput();
@@ -98,27 +109,7 @@ class Play extends Phaser.Scene {
         staffPickup = true
     }
 
-    // Creates the attack animations
-    createAnimations() {
-
-        // this.anims.create({
-        //     key: 'avatar attack',
-        //     frames: this.anims.generateFrameNumbers('avatar1-attacking, { start: 0, end: 23, first: 23 }),
-        //     frameRate: 20,
-        //     repeat: -1
-        // });
-
-        // this.anims.create({
-        //     key: 'avatar2 attack',
-        //     frames: this.anims.generateFrameNumbers('avatar2-attacking, { start: 0, end: 23, first: 23 }),
-        //     frameRate: 20,
-        //     repeat: -1
-        // });
-
-    }
-
     handleInput() {
-
         // Handles player 1's movement and the size changes and attacks of both players
         this.input.keyboard.on('keydown', event => {
 
@@ -147,7 +138,7 @@ class Play extends Phaser.Scene {
                 this.avatar.scale = 0.4
             }
 
-            // Makes P2 smaller using the u key
+            // Makes P2 smaller using the o key
             else if (event.keyCode === 73) {
                 this.avatar2.scale = 0.2
             }
@@ -158,15 +149,18 @@ class Play extends Phaser.Scene {
             }
 
             // Triggers player 1's attack using the f key
-            else if (event.keyCode === 70 || swordPickup === true) {
-                // this.avatar.anims.play('avatar attack')
-                swordAttack()
+            else if (event.keyCode === 70 && swordPickup === true) {
+                this.avatar.anims.play('avatar attack')
+                this.swordAttack()
+                this.avatar.chain('idle animation');
+
             }
 
             // Triggers player 2's attack using the k key
-            else if (event.keyCode === 75 || staffPickup === true) {
-                // this.avatar2.anims.play('avatar attack')
-                staffAttack()
+            else if (event.keyCode === 75 && staffPickup === true) {
+                this.avatar2.anims.play('avatar attack')
+                this.staffAttack()
+                this.avatar2.chain('idle animation');
             }
         });
 
@@ -218,18 +212,16 @@ class Play extends Phaser.Scene {
             this.avatar2.setVelocityY(0);
         }
 
-        // swordAttack() {
-        //     maleficientRuneLifePoints = maleficientRuneLifePoints - 1
-        // }
-
-        // staffAttack() {
-        //     maleficientRuneLifePoints = maleficientRuneLifePoints - 1
-        // }
-
-
 
     }
 
+    swordAttack() {
+        maleficientRuneLifePoints = maleficientRuneLifePoints - 1
+    }
+
+    staffAttack() {
+        maleficientRuneLifePoints = maleficientRuneLifePoints - 1
+    }
 
 
 

@@ -38,7 +38,7 @@ let swordPickup = false
 let staffPickup = false
 
 // Assigns the amount of life points the maleficient rune has
-let maleficientRuneLifePoints = 10
+let maleficientRuneLifePoints = 7000
 
 // Here we actually create the game using this configuration!
 let game = new Phaser.Game(config);
@@ -64,8 +64,4 @@ Description of draw()
 */
 function draw() {
 
-}
-
-function MouseClicked() {
-    this.scene.start(`Play`);
 }

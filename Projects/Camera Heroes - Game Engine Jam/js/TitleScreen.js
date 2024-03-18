@@ -35,7 +35,7 @@ class TitleScreen extends Phaser.Scene {
         // Creates text strings used in the title screen
         let gameDescription = `Camera Heroes!`;
         let gameInstructions = `Use the WASD keys and the arrow keys to move both characters.`;
-        let gameInstructions4 = `Use the E and R keys to shrink and return to your original size as P1. Player 2 uses the U and I keys`
+        let gameInstructions4 = `Use the E and R keys to shrink and return to your original size as P1. Player 2 uses the I and O keys`
         let gameInstructions2 = `Pick up the weapons in the dungeon (P1 = F to swing, P2: k to swing)`;
         let gameInstructions3 = `Your objective is to destroy the maleficient rune!`;
         let startInstruction = `Click to start!`;
