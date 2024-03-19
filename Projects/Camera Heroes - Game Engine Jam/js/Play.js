@@ -44,7 +44,7 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.maleficientRune, this.avatar2);
 
         // Creates and manages the collectable items
-        this.heroSword = this.physics.add.sprite(90, 430, `heroSword`);
+        this.heroSword = this.physics.add.sprite(1300, 430, `heroSword`);
         this.heroStaff = this.physics.add.sprite(1300, 100, `heroStaff`);
 
         // Allows the players to pick up their respective items
