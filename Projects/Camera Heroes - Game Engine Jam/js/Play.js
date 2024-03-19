@@ -6,8 +6,8 @@ class Play extends Phaser.Scene {
     }
 
     create() {
-        // Creates the stage where the game is played
 
+        // Creates the stage where the game is played
         const map = this.make.tilemap({ key: `dungeon` })
         const tileset = map.addTilesetImage(`Game Sprite Sheet`, `tiles`)
         const groundLayer = map.createLayer('Ground & hidden stuff', tileset, 0, 0)
@@ -44,7 +44,7 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.maleficientRune, this.avatar2);
 
         // Creates and manages the collectable items
-        this.heroSword = this.physics.add.sprite(1300, 430, `heroSword`);
+        this.heroSword = this.physics.add.sprite(90, 430, `heroSword`);
         this.heroStaff = this.physics.add.sprite(1300, 100, `heroStaff`);
 
         // Allows the players to pick up their respective items
@@ -55,10 +55,10 @@ class Play extends Phaser.Scene {
         this.createAnimations();
         this.avatar.play('idle animation')
         this.avatar2.play('idle animation')
+        this.maleficientRune.play('idle Rune')
 
         // Create our basic controls
         this.cursors = this.input.keyboard.createCursorKeys();
-
 
         // Sets up the various cameras in the game
         this.cameras.main.setSize(200, 160);
@@ -83,6 +83,9 @@ class Play extends Phaser.Scene {
         this.avatar.setCollideWorldBounds(true);
         this.avatar2.setCollideWorldBounds(true);
 
+        // Assigns the amount of life points the maleficient rune has
+        this.maleficientRuneLifePoints = 100000
+
     }
 
     // Creates the animations
@@ -100,11 +103,26 @@ class Play extends Phaser.Scene {
             frameRate: 20,
             repeat: 0
         });
+
+        this.anims.create({
+            key: 'idle Rune',
+            frames: this.anims.generateFrameNumbers(`maleficientRune`, { start: 0, end: 0, first: 0 }),
+            frameRate: 0,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'damaged Rune',
+            frames: this.anims.generateFrameNumbers(`maleficientRune`, { start: 0, end: 6, first: 0 }),
+            frameRate: 20,
+            repeat: 0
+        });
     }
 
-    // Continuously checks for player input
+    // Continuously checks for player input, the distance between the players and the Maleficient Rune and if the game end conditions are met
     update() {
         this.handleInput();
+        this.distanceCalculation()
         this.gameEnd();
     }
 
@@ -197,7 +215,7 @@ class Play extends Phaser.Scene {
             }
         });
 
-        // Manages Player 2's movement and attack
+        // Manages Player 2's movement
         if (this.cursors.left.isDown) {
             this.avatar2.setGravityX(-this.avatar.speed);
         }
@@ -221,22 +239,35 @@ class Play extends Phaser.Scene {
             this.avatar2.setGravityY(0);
             this.avatar2.setVelocityY(0);
         }
-
-
     }
 
-    // Allows both players to deal damage to the Maleficient Rune
+    distanceCalculation() {
+        // Determines the distance between the player and the Maleficient Rune
+        proximity.distance1 = dist(this.avatar.x, this.avatar.y, this.maleficientRune.x, this.maleficientRune.y);
+        proximity.distance2 = dist(this.avatar2.x, this.avatar2.y, this.maleficientRune.x, this.maleficientRune.y);
+    }
+
+    // Allows both players to deal damage to the Maleficient Rune. Also plays the Rune's damage animation
     swordAttack() {
-        maleficientRuneLifePoints = maleficientRuneLifePoints - 1
+        if (proximity.distance1 < attackRange) {
+            this.maleficientRuneLifePoints = this.maleficientRuneLifePoints - 1
+            this.maleficientRune.anims.play('damaged Rune')
+            this.maleficientRune.chain('idle Rune');
+        }
     }
 
     staffAttack() {
-        maleficientRuneLifePoints = maleficientRuneLifePoints - 1
+        if (proximity.distance2 < attackRange) {
+            this.maleficientRuneLifePoints = this.maleficientRuneLifePoints - 1
+            this.maleficientRune.anims.play('damaged Rune')
+            this.maleficientRune.chain('idle Rune');
+        }
     }
 
+    // Checks if the game end conditions have been met and if so switches the scene to the end screem
     gameEnd() {
-        console.log(maleficientRuneLifePoints)
-        if (maleficientRuneLifePoints < 0) {
+        console.log(this.maleficientRuneLifePoints)
+        if (this.maleficientRuneLifePoints < 0) {
             this.scene.start(`EndScreen`);
         }
     }

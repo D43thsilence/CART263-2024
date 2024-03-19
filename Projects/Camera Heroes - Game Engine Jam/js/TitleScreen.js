@@ -48,8 +48,6 @@ class TitleScreen extends Phaser.Scene {
         this.gameText = this.add.text(width / 1.1, height / 0.45, gameInstructions3, style3);
         this.gameText = this.add.text(width / 0.7, height / 0.4, startInstruction, style2);
 
-        // this.titleScreenImage = this.add.image(400, 300, 'taikodrummaster');
-
         // Switches the scene to the Play scene
         this.input.on('pointerdown', () => {
             this.scene.start('Play');

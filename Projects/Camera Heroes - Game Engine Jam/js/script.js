@@ -9,9 +9,7 @@ Move around a maze to obtain the weapons needed to destroy the Maleficient Rune!
 
 // These are the configuration parameters for the game
 let config = {
-    // The type refers to the kind of display we'll be using
-    // which is either Canvas or WebGL. The Phaser.AUTO setting
-    // will choose the best option for us.
+    // Automatically sets the game's display
     type: Phaser.AUTO,
     // Defines game dimensions
     width: 400,
@@ -31,8 +29,13 @@ let config = {
 let swordPickup = false
 let staffPickup = false
 
-// Assigns the amount of life points the maleficient rune has
-let maleficientRuneLifePoints = 100000
+// Sets up the proximity and attackRange variable to measure how far the players are from the Maleficient Rune and at what range they can hit it.
+let proximity = {
+    distance1: 0,
+    distance2: 0
+}
+
+let attackRange = 80
 
 // Creates the game using the configuration
 let game = new Phaser.Game(config);

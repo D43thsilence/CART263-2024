@@ -22,10 +22,14 @@ class Boot extends Phaser.Scene {
         // Loads the images
         this.load.setPath('assets/images/');
         this.load.image(`tiles`, `Game Sprite Sheet.png`);
-        this.load.image(`maleficientRune`, `Maleficient Rune.png`);
         this.load.image(`heroSword`, `Hero Sword.png`);
         this.load.image(`heroStaff`, `Hero Staff.png`);
         this.load.image(`heroStaff`, `Hero Staff.png`);
+        this.load.spritesheet(`maleficientRune`, `Maleficient Rune-sheet.png`, {
+            frameWidth: 128,
+            frameHeight: 128,
+            endFrame: 6
+        })
         this.load.spritesheet(`heroSwing`, `Hero Sword Swing.png`, {
             frameWidth: 256,
             frameHeight: 256,
