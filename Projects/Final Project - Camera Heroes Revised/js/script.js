@@ -19,7 +19,7 @@ let config = {
         default: 'arcade',
     },
     // Lists array of scenes and scales them appropriately
-    scene: [Boot, TitleScreen, Play, EndScreen],
+    scene: [Boot, TitleScreen, Play, Level02, EndScreen],
     scale: {
         zoom: 2
     }

@@ -1,24 +1,25 @@
-class Play extends Phaser.Scene {
+class Level02 extends Phaser.Scene {
     constructor() {
         super({
-            key: `Play`
+            key: `Level02`
         });
     }
 
     create() {
 
         // Creates the stage where the game is played
-        const map = this.make.tilemap({ key: `dungeon` })
-        const tileset = map.addTilesetImage(`Game Sprite Sheet`, `tiles`)
-        const groundLayer = map.createLayer('Ground & hidden stuff', tileset, 0, 0)
+        const map = this.make.tilemap({ key: `dungeon02` })
+        const tileset = map.addTilesetImage(`Level 2 Tilemap`, `tiles02`)
+        const backgroundColorLayer = map.createLayer('Background Color', tileset, 0, 0)
+        const backgroundLayer = map.createLayer('Background', tileset, 0, 0)
+        const groundLayer = map.createLayer('Floor', tileset, 0, 0)
         const wallsLayer = map.createLayer('Walls', tileset, 0, 0)
-        const aboveLayer = map.createLayer('Above Ground', tileset, 0, 0)
 
         // Creates the collisions between the players and the level
         wallsLayer.setCollisionByProperty({ collides: true })
 
         // Creates all the player avatars and their collisions
-        this.avatar = this.physics.add.sprite(150, 270, `playerCharacter`);
+        this.avatar = this.physics.add.sprite(740, 400, `playerCharacter`);
         this.avatar.scale = 0.4;
         this.avatar.speed = 500;
         this.avatar.setMaxVelocity(130, 130);
@@ -26,7 +27,7 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.avatar, wallsLayer);
         this.physics.add.collider(this.avatar, this.maleficientRune);
 
-        this.avatar2 = this.physics.add.sprite(150, 420, `playerCharacter`);
+        this.avatar2 = this.physics.add.sprite(860, 400, `playerCharacter`);
         this.avatar2.scale = 0.4;
         this.avatar2.speed = 500;
         this.avatar2.setMaxVelocity(130, 130);
@@ -35,7 +36,7 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.avatar2, this.maleficientRune);
 
         // Creates the Maleficient Rune
-        this.maleficientRune = this.physics.add.sprite(90, 340, `maleficientRune`);
+        this.maleficientRune = this.physics.add.sprite(800, 400, `maleficientRune`);
         this.maleficientRune.scale = 0.9;
         // Adjusts the collision box of the Maleficient Rune
         this.maleficientRune.body.setSize(this.maleficientRune.width / 2, this.maleficientRune.height * 0.8)
@@ -44,8 +45,8 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.maleficientRune, this.avatar2);
 
         // Creates and manages the collectable items
-        this.heroSword = this.physics.add.sprite(1300, 430, `heroSword`);
-        this.heroStaff = this.physics.add.sprite(1300, 100, `heroStaff`);
+        this.heroSword = this.physics.add.sprite(100, 560, `heroSword`);
+        this.heroStaff = this.physics.add.sprite(1280, 370, `heroStaff`);
 
         // Allows the players to pick up their respective items
         this.physics.add.overlap(this.avatar, this.heroSword, this.collectSword, null, this);
@@ -69,14 +70,14 @@ class Play extends Phaser.Scene {
 
         this.cameras.main.startFollow(this.avatar, 0.1, 0.1);
 
-        cam2.startFollow(this.avatar, false, 0.1, 0.1);
+        cam2.startFollow(this.heroSword, false, 0.1, 0.1);
         cam3.startFollow(this.avatar2, false, 0.1, 0.1);
-        cam4.startFollow(this.avatar2, false, 0.1, 0.1);
+        cam4.startFollow(this.heroStaff, false, 0.1, 0.1);
 
-        this.cameras.main.setBounds(0, 0, 800, 640);
-        cam2.setBounds(800, 0, 800, 640);
-        cam3.setBounds(0, 0, 800, 640);
-        cam4.setBounds(800, 0, 800, 640);
+        // this.cameras.main.setBounds(0, 0, 800, 640);
+        // cam2.setBounds(800, 0, 800, 640);
+        // cam3.setBounds(0, 0, 800, 640);
+        // cam4.setBounds(800, 0, 800, 640);
 
         // Sets the bounds of the world
         this.physics.world.setBounds(0, 0, 800 * 2, 640);
@@ -123,7 +124,7 @@ class Play extends Phaser.Scene {
     update() {
         this.handleInput();
         this.distanceCalculation()
-        this.levelEnd();
+        this.gameEnd();
     }
 
     // Removes the items after the player has collected them
@@ -264,11 +265,11 @@ class Play extends Phaser.Scene {
         }
     }
 
-    // Checks if the level end conditions have been met and if so switches the scene to the next level
-    levelEnd() {
+    // Checks if the game end conditions have been met and if so switches the scene to the end screem
+    gameEnd() {
         console.log(this.maleficientRuneLifePoints)
         if (this.maleficientRuneLifePoints < 0) {
-            this.scene.start(`Level02`);
+            this.scene.start(`EndScreen`);
         }
     }
 

@@ -22,6 +22,7 @@ class Boot extends Phaser.Scene {
         // Loads the images
         this.load.setPath('assets/images/');
         this.load.image(`tiles`, `Game Sprite Sheet.png`);
+        this.load.image(`tiles02`, `Level 2 Tilemap.png`);
         this.load.image(`heroSword`, `Hero Sword.png`);
         this.load.image(`heroStaff`, `Hero Staff.png`);
         this.load.image(`heroStaff`, `Hero Staff.png`);
@@ -41,6 +42,7 @@ class Boot extends Phaser.Scene {
             endFrame: 0
         });
         this.load.tilemapTiledJSON(`dungeon`, `Dungeon-01.tmj`)
+        this.load.tilemapTiledJSON(`dungeon02`, `Dungeon-02.tmj`)
 
         // NOTE: now that we're loading an actual file, we need to wait until everything
         // loads before switching to the next scene. We use the "complete" event listener
