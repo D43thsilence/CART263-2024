@@ -35,6 +35,10 @@ class Level02 extends Phaser.Scene {
         this.physics.add.collider(this.avatar2, wallsLayer);
         this.physics.add.collider(this.avatar2, this.maleficientRune);
 
+        // Resets the pickup variable for both players
+        this.swordPickup = false
+        this.staffPickup = false
+
         // Creates the Maleficient Rune
         this.maleficientRune = this.physics.add.sprite(800, 400, `maleficientRune`);
         this.maleficientRune.scale = 0.9;
@@ -130,12 +134,12 @@ class Level02 extends Phaser.Scene {
     // Removes the items after the player has collected them
     collectSword(playerCharacter, item) {
         item.destroy();
-        swordPickup = true
+        this.swordPickup = true
     }
 
     collectStaff(playerCharacter, item) {
         item.destroy();
-        staffPickup = true
+        this.staffPickup = true
     }
 
     handleInput() {
@@ -178,7 +182,7 @@ class Level02 extends Phaser.Scene {
             }
 
             // Triggers player 1's attack using the f key
-            else if (event.keyCode === 70 && swordPickup === true) {
+            else if (event.keyCode === 70 && this.swordPickup === true) {
                 this.avatar.anims.play('avatar attack')
                 this.swordAttack()
                 this.avatar.chain('idle animation');
@@ -186,7 +190,7 @@ class Level02 extends Phaser.Scene {
             }
 
             // Triggers player 2's attack using the k key
-            else if (event.keyCode === 75 && staffPickup === true) {
+            else if (event.keyCode === 75 && this.staffPickup === true) {
                 this.avatar2.anims.play('avatar attack')
                 this.staffAttack()
                 this.avatar2.chain('idle animation');
