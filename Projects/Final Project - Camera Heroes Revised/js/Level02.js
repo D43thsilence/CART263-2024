@@ -26,7 +26,7 @@ class Level02 extends Phaser.Scene {
         this.avatar.setTint(0xdd3333);
         this.physics.add.collider(this.avatar, wallsLayer);
         this.physics.add.collider(this.avatar, this.maleficientRune);
-        this.physics.add.collider(this.avatar, this.lizard);
+
 
         this.avatar2 = this.physics.add.sprite(860, 400, `playerCharacter`);
         this.avatar2.scale = 0.4;
@@ -35,7 +35,7 @@ class Level02 extends Phaser.Scene {
         this.avatar2.setTint(0x3333dd);
         this.physics.add.collider(this.avatar2, wallsLayer);
         this.physics.add.collider(this.avatar2, this.maleficientRune);
-        this.physics.add.collider(this.avatar2, this.lizard);
+
 
         // Resets the pickup variable for both players
         this.swordPickup = false;
@@ -43,6 +43,9 @@ class Level02 extends Phaser.Scene {
 
         // Spawns an enemy lizard that blocks access to one of the weapons the heroes need
         this.lizard = this.physics.add.sprite(71.5, 458, `lizardRunning`);
+        this.lizard.setImmovable(true);
+        this.physics.add.collider(this.lizard, this.avatar);
+        this.physics.add.collider(this.lizard, this.avatar2);
 
         // Creates the Maleficient Rune
         this.maleficientRune = this.physics.add.sprite(800, 400, `maleficientRune`);
@@ -137,7 +140,7 @@ class Level02 extends Phaser.Scene {
 
         this.anims.create({
             key: 'damaged Rune',
-            frames: this.anims.generateFrameNumbers(`maleficientRune`, { start: 0, end: 6, first: 0 }),
+            frames: this.anims.generateFrameNumbers(`maleficientRune`, { start: 0, end: 5, first: 0 }),
             frameRate: 20,
             repeat: 0
         });
@@ -265,25 +268,36 @@ class Level02 extends Phaser.Scene {
     }
 
     distanceCalculation() {
-        // Determines the distance between the player and the Maleficient Rune
-        proximity.distance1 = dist(this.avatar.x, this.avatar.y, this.maleficientRune.x, this.maleficientRune.y);
-        proximity.distance2 = dist(this.avatar2.x, this.avatar2.y, this.maleficientRune.x, this.maleficientRune.y);
+        // Determines the distance between the player, the lizard and the Maleficient Rune
+        proximity[0] = dist(this.avatar.x, this.avatar.y, this.maleficientRune.x, this.maleficientRune.y);
+        proximity[1] = dist(this.avatar2.x, this.avatar2.y, this.maleficientRune.x, this.maleficientRune.y);
+        proximity[2] = dist(this.avatar.x, this.avatar.y, this.lizard.x, this.lizard.y);
+        proximity[3] = dist(this.avatar2.x, this.avatar2.y, this.lizard.x, this.lizard.y);
+        console.log(proximity[2])
     }
 
-    // Allows both players to deal damage to the Maleficient Rune. Also plays the Rune's damage animation
+    // Allows both players to deal damage to the lizard and Maleficient Rune. Also plays the Rune's damage animation
     swordAttack() {
-        if (proximity.distance1 < attackRange) {
+        if (proximity[0] < attackRange) {
             this.maleficientRuneLifePoints = this.maleficientRuneLifePoints - 1
             this.maleficientRune.anims.play('damaged Rune')
             this.maleficientRune.chain('idle Rune');
         }
+
+        else if (proximity[3] < attackRange) {
+            this.lizard.destroy()
+        }
     }
 
     staffAttack() {
-        if (proximity.distance2 < attackRange) {
+        if (proximity[1] < attackRange) {
             this.maleficientRuneLifePoints = this.maleficientRuneLifePoints - 1
             this.maleficientRune.anims.play('damaged Rune')
             this.maleficientRune.chain('idle Rune');
+        }
+
+        else if (proximity[3] < attackRange) {
+            this.lizard.destroy()
         }
     }
 

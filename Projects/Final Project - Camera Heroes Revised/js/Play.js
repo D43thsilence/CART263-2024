@@ -8,11 +8,11 @@ class Play extends Phaser.Scene {
     create() {
 
         // Creates the stage where the game is played
-        const map = this.make.tilemap({ key: `dungeon` })
-        const tileset = map.addTilesetImage(`Game Sprite Sheet`, `tiles`)
-        const groundLayer = map.createLayer('Ground & hidden stuff', tileset, 0, 0)
-        const wallsLayer = map.createLayer('Walls', tileset, 0, 0)
-        const aboveLayer = map.createLayer('Above Ground', tileset, 0, 0)
+        const map = this.make.tilemap({ key: `dungeon` });
+        const tileset = map.addTilesetImage(`Game Sprite Sheet`, `tiles`);
+        const groundLayer = map.createLayer('Ground & hidden stuff', tileset, 0, 0);
+        const wallsLayer = map.createLayer('Walls', tileset, 0, 0);
+        const aboveLayer = map.createLayer('Above Ground', tileset, 0, 0);
 
         // Creates the collisions between the players and the level
         wallsLayer.setCollisionByProperty({ collides: true })
@@ -35,14 +35,14 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.avatar2, this.maleficientRune);
 
         // Sets the pickup variable for both players
-        this.swordPickup = false
-        this.staffPickup = false
+        this.swordPickup = false;
+        this.staffPickup = false;
 
         // Creates the Maleficient Rune
         this.maleficientRune = this.physics.add.sprite(90, 340, `maleficientRune`);
         this.maleficientRune.scale = 0.9;
         // Adjusts the collision box of the Maleficient Rune
-        this.maleficientRune.body.setSize(this.maleficientRune.width / 2, this.maleficientRune.height * 0.8)
+        this.maleficientRune.body.setSize(this.maleficientRune.width / 2, this.maleficientRune.height * 0.8);
         this.maleficientRune.setImmovable(true);
         this.physics.add.collider(this.maleficientRune, this.avatar);
         this.physics.add.collider(this.maleficientRune, this.avatar2);
@@ -57,9 +57,9 @@ class Play extends Phaser.Scene {
 
         // Creates the animations used in the program and initiates the character's animations
         this.createAnimations();
-        this.avatar.play('idle animation')
-        this.avatar2.play('idle animation')
-        this.maleficientRune.play('idle Rune')
+        this.avatar.play('idle animation');
+        this.avatar2.play('idle animation');
+        this.maleficientRune.play('idle Rune');
 
         // Create our basic controls
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -88,7 +88,7 @@ class Play extends Phaser.Scene {
         this.avatar2.setCollideWorldBounds(true);
 
         // Assigns the amount of life points the maleficient rune has
-        this.maleficientRuneLifePoints = 100000
+        this.maleficientRuneLifePoints = 100000;
 
     }
 
@@ -117,7 +117,7 @@ class Play extends Phaser.Scene {
 
         this.anims.create({
             key: 'damaged Rune',
-            frames: this.anims.generateFrameNumbers(`maleficientRune`, { start: 0, end: 6, first: 0 }),
+            frames: this.anims.generateFrameNumbers(`maleficientRune`, { start: 0, end: 5, first: 0 }),
             frameRate: 20,
             repeat: 0
         });
@@ -126,7 +126,7 @@ class Play extends Phaser.Scene {
     // Continuously checks for player input, the distance between the players and the Maleficient Rune and if the game end conditions are met
     update() {
         this.handleInput();
-        this.distanceCalculation()
+        this.distanceCalculation();
         this.levelEnd();
     }
 
@@ -138,7 +138,7 @@ class Play extends Phaser.Scene {
 
     collectStaff(playerCharacter, item) {
         item.destroy();
-        this.staffPickup = true
+        this.staffPickup = true;
     }
 
     handleInput() {
@@ -162,27 +162,27 @@ class Play extends Phaser.Scene {
 
             // Makes P1 smaller using the e key
             else if (event.keyCode === 82) {
-                this.avatar.scale = 0.2
+                this.avatar.scale = 0.2;
             }
 
             // Returns P1 to the original size using the r key
             else if (event.keyCode === 84) {
-                this.avatar.scale = 0.4
+                this.avatar.scale = 0.4;
             }
 
             // Makes P2 smaller using the o key
             else if (event.keyCode === 73) {
-                this.avatar2.scale = 0.2
+                this.avatar2.scale = 0.2;
             }
 
             // Returns P2 to the original size using the i key
             else if (event.keyCode === 79) {
-                this.avatar2.scale = 0.4
+                this.avatar2.scale = 0.4;
             }
 
             // Triggers player 1's attack using the f key
             else if (event.keyCode === 70 && this.swordPickup === true) {
-                this.avatar.anims.play('avatar attack')
+                this.avatar.anims.play('avatar attack');
                 this.swordAttack()
                 this.avatar.chain('idle animation');
 
@@ -190,8 +190,8 @@ class Play extends Phaser.Scene {
 
             // Triggers player 2's attack using the k key
             else if (event.keyCode === 75 && this.staffPickup === true) {
-                this.avatar2.anims.play('avatar attack')
-                this.staffAttack()
+                this.avatar2.anims.play('avatar attack');
+                this.staffAttack();
                 this.avatar2.chain('idle animation');
             }
         });
@@ -254,16 +254,16 @@ class Play extends Phaser.Scene {
     // Allows both players to deal damage to the Maleficient Rune. Also plays the Rune's damage animation
     swordAttack() {
         if (proximity.distance1 < attackRange) {
-            this.maleficientRuneLifePoints = this.maleficientRuneLifePoints - 1
-            this.maleficientRune.anims.play('damaged Rune')
+            this.maleficientRuneLifePoints = this.maleficientRuneLifePoints - 1;
+            this.maleficientRune.anims.play('damaged Rune');
             this.maleficientRune.chain('idle Rune');
         }
     }
 
     staffAttack() {
         if (proximity.distance2 < attackRange) {
-            this.maleficientRuneLifePoints = this.maleficientRuneLifePoints - 1
-            this.maleficientRune.anims.play('damaged Rune')
+            this.maleficientRuneLifePoints = this.maleficientRuneLifePoints - 1;
+            this.maleficientRune.anims.play('damaged Rune');
             this.maleficientRune.chain('idle Rune');
         }
     }

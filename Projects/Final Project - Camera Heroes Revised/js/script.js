@@ -30,10 +30,7 @@ let swordPickup = false
 let staffPickup = false
 
 // Sets up the proximity and attackRange variable to measure how far the players are from the Maleficient Rune and at what range they can hit it.
-let proximity = {
-    distance1: 0,
-    distance2: 0
-}
+let proximity = []
 
 let attackRange = 80
 
