@@ -1,7 +1,7 @@
-class Level02 extends Phaser.Scene {
+class Level03 extends Phaser.Scene {
     constructor() {
         super({
-            key: `Level02`
+            key: `Level03`
         });
     }
 
@@ -43,9 +43,8 @@ class Level02 extends Phaser.Scene {
 
         // Spawns an enemy lizard that blocks access to one of the weapons the heroes need
         this.lizard = this.physics.add.sprite(71.5, 458, `lizardRunning`);
-        this.lizard.setImmovable(true);
-        this.physics.add.collider(this.lizard, this.avatar);
-        this.physics.add.collider(this.lizard, this.avatar2);
+        this.physics.add.collider(this.lizards, this.avatar);
+        this.physics.add.collider(this.lizards, this.avatar2);
 
         // Creates the Maleficient Rune
         this.maleficientRune = this.physics.add.sprite(800, 400, `maleficientRune`);
@@ -271,8 +270,8 @@ class Level02 extends Phaser.Scene {
         // Determines the distance between the player, the lizard and the Maleficient Rune
         proximity[0] = dist(this.avatar.x, this.avatar.y, this.maleficientRune.x, this.maleficientRune.y);
         proximity[1] = dist(this.avatar2.x, this.avatar2.y, this.maleficientRune.x, this.maleficientRune.y);
-        proximity[2] = dist(this.avatar.x, this.avatar.y, this.lizard.x, this.lizard.y);
-        proximity[3] = dist(this.avatar2.x, this.avatar2.y, this.lizard.x, this.lizard.y);
+        // proximity[2] = dist(this.avatar.x, this.avatar.y, this.lizard.x, this.lizard.y);
+        // proximity[3] = dist(this.avatar2.x, this.avatar2.y, this.lizard.x, this.lizard.y);
     }
 
     // Allows both players to deal damage to the lizard and Maleficient Rune. Also plays the Rune's damage animation
@@ -284,7 +283,7 @@ class Level02 extends Phaser.Scene {
         }
 
         else if (proximity[3] < attackRange) {
-            this.lizard.destroy()
+            // this.lizard.destroy()
         }
     }
 
@@ -296,7 +295,7 @@ class Level02 extends Phaser.Scene {
         }
 
         else if (proximity[3] < attackRange) {
-            this.lizard.destroy()
+            // this.lizard.destroy()
         }
     }
 
