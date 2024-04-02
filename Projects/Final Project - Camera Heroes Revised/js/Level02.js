@@ -8,15 +8,15 @@ class Level02 extends Phaser.Scene {
     create() {
 
         // Creates the stage where the game is played
-        const map = this.make.tilemap({ key: `dungeon02` })
-        const tileset = map.addTilesetImage(`Level 2 Tilemap`, `tiles02`)
-        const backgroundColorLayer = map.createLayer('Background Color', tileset, 0, 0)
-        const backgroundLayer = map.createLayer('Background', tileset, 0, 0)
-        const groundLayer = map.createLayer('Floor', tileset, 0, 0)
+        const map = this.make.tilemap({ key: `dungeon02` });
+        const tileset = map.addTilesetImage(`Level 2 Tilemap`, `tiles02`);
+        const backgroundColorLayer = map.createLayer('Background Color', tileset, 0, 0);
+        const backgroundLayer = map.createLayer('Background', tileset, 0, 0);
+        const groundLayer = map.createLayer('Floor', tileset, 0, 0);
         const wallsLayer = map.createLayer('Walls', tileset, 0, 0)
 
         // Creates the collisions between the players and the level
-        wallsLayer.setCollisionByProperty({ collides: true })
+        wallsLayer.setCollisionByProperty({ collides: true });
 
         // Creates all the player avatars and their collisions
         this.avatar = this.physics.add.sprite(740, 400, `playerCharacter`);
@@ -26,6 +26,7 @@ class Level02 extends Phaser.Scene {
         this.avatar.setTint(0xdd3333);
         this.physics.add.collider(this.avatar, wallsLayer);
         this.physics.add.collider(this.avatar, this.maleficientRune);
+        this.physics.add.collider(this.avatar, this.lizard);
 
         this.avatar2 = this.physics.add.sprite(860, 400, `playerCharacter`);
         this.avatar2.scale = 0.4;
@@ -34,10 +35,14 @@ class Level02 extends Phaser.Scene {
         this.avatar2.setTint(0x3333dd);
         this.physics.add.collider(this.avatar2, wallsLayer);
         this.physics.add.collider(this.avatar2, this.maleficientRune);
+        this.physics.add.collider(this.avatar2, this.lizard);
 
         // Resets the pickup variable for both players
-        this.swordPickup = false
-        this.staffPickup = false
+        this.swordPickup = false;
+        this.staffPickup = false;
+
+        // Spawns an enemy lizard that blocks access to one of the weapons the heroes need
+        this.lizard = this.physics.add.sprite(71.5, 458, `lizardRunning`);
 
         // Creates the Maleficient Rune
         this.maleficientRune = this.physics.add.sprite(800, 400, `maleficientRune`);
@@ -61,6 +66,7 @@ class Level02 extends Phaser.Scene {
         this.avatar.play('idle animation')
         this.avatar2.play('idle animation')
         this.maleficientRune.play('idle Rune')
+        this.lizard.play('lizard idle')
 
         // Create our basic controls
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -90,7 +96,6 @@ class Level02 extends Phaser.Scene {
 
         // Assigns the amount of life points the maleficient rune has
         this.maleficientRuneLifePoints = 100000
-
     }
 
     // Creates the animations
@@ -107,6 +112,20 @@ class Level02 extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers(`heroSwing`, { start: 0, end: 9, first: 0 }),
             frameRate: 20,
             repeat: 0
+        });
+
+        this.anims.create({
+            key: 'lizard idle',
+            frames: this.anims.generateFrameNumbers(`lizardIdle`, { start: 0, end: 3, first: 0 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'lizard run',
+            frames: this.anims.generateFrameNumbers(`lizardRunning`, { start: 0, end: 3, first: 0 }),
+            frameRate: 10,
+            repeat: -1
         });
 
         this.anims.create({
@@ -186,7 +205,6 @@ class Level02 extends Phaser.Scene {
                 this.avatar.anims.play('avatar attack')
                 this.swordAttack()
                 this.avatar.chain('idle animation');
-
             }
 
             // Triggers player 2's attack using the k key

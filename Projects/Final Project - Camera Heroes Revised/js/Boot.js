@@ -25,7 +25,6 @@ class Boot extends Phaser.Scene {
         this.load.image(`tiles02`, `Level 2 Tilemap.png`);
         this.load.image(`heroSword`, `Hero Sword.png`);
         this.load.image(`heroStaff`, `Hero Staff.png`);
-        this.load.image(`heroStaff`, `Hero Staff.png`);
         this.load.spritesheet(`maleficientRune`, `Maleficient Rune-sheet.png`, {
             frameWidth: 128,
             frameHeight: 128,
@@ -41,6 +40,16 @@ class Boot extends Phaser.Scene {
             frameHeight: 64,
             endFrame: 0
         });
+        this.load.spritesheet(`lizardRunning`, `lizard running.png`, {
+            frameWidth: 16,
+            frameHeight: 28,
+            endFrame: 3
+        })
+        this.load.spritesheet(`lizardIdle`, `lizard idle anim.png`, {
+            frameWidth: 16,
+            frameHeight: 28,
+            endFrame: 3
+        })
         this.load.tilemapTiledJSON(`dungeon`, `Dungeon-01.tmj`)
         this.load.tilemapTiledJSON(`dungeon02`, `Dungeon-02.tmj`)
 
