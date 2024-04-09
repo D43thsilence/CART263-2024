@@ -63,8 +63,7 @@ class Level03 extends Phaser.Scene {
         this.physics.add.overlap(this.avatar, this.heroSword, this.collectSword, null, this);
         this.physics.add.overlap(this.avatar2, this.heroStaff, this.collectStaff, null, this);
 
-        // Creates the animations used in the program and initiates the character's animations
-        this.createAnimations();
+        // Initiates the character's animations
         this.avatar.play('idle animation')
         this.avatar2.play('idle animation')
         this.maleficientRune.play('idle Rune')
@@ -98,51 +97,6 @@ class Level03 extends Phaser.Scene {
 
         // Assigns the amount of life points the maleficient rune has
         this.maleficientRuneLifePoints = 100000
-    }
-
-    // Creates the animations
-    createAnimations() {
-        this.anims.create({
-            key: 'idle animation',
-            frames: this.anims.generateFrameNumbers(`playerCharacter`, { start: 0, end: 0, first: 0 }),
-            frameRate: 0,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'avatar attack',
-            frames: this.anims.generateFrameNumbers(`heroSwing`, { start: 0, end: 9, first: 0 }),
-            frameRate: 20,
-            repeat: 0
-        });
-
-        this.anims.create({
-            key: 'lizard idle',
-            frames: this.anims.generateFrameNumbers(`lizardIdle`, { start: 0, end: 3, first: 0 }),
-            frameRate: 10,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'lizard run',
-            frames: this.anims.generateFrameNumbers(`lizardRunning`, { start: 0, end: 3, first: 0 }),
-            frameRate: 10,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'idle Rune',
-            frames: this.anims.generateFrameNumbers(`maleficientRune`, { start: 0, end: 0, first: 0 }),
-            frameRate: 0,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'damaged Rune',
-            frames: this.anims.generateFrameNumbers(`maleficientRune`, { start: 0, end: 5, first: 0 }),
-            frameRate: 20,
-            repeat: 0
-        });
     }
 
     // Continuously checks for player input, the distance between the players and the Maleficient Rune and if the game end conditions are met

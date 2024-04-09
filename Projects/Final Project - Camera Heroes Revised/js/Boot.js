@@ -40,7 +40,12 @@ class Boot extends Phaser.Scene {
             frameHeight: 64,
             endFrame: 0
         });
-        this.load.spritesheet(`lizardRunning`, `lizard running.png`, {
+        this.load.spritesheet(`merchantIdle`, `Merchant Idle.png`, {
+            frameWidth: 16,
+            frameHeight: 28,
+            endFrame: 3
+        })
+        this.load.spritesheet(`wizardIdle`, `Wizard Idle.png`, {
             frameWidth: 16,
             frameHeight: 28,
             endFrame: 3
@@ -74,6 +79,57 @@ class Boot extends Phaser.Scene {
 
             this.add.image(x, y, keys[i]);
         }
+
+        this.createAnimations();
+    }
+
+    // Creates the animations
+    createAnimations() {
+        this.anims.create({
+            key: 'idle animation',
+            frames: this.anims.generateFrameNumbers(`playerCharacter`, { start: 0, end: 0, first: 0 }),
+            frameRate: 0,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'avatar attack',
+            frames: this.anims.generateFrameNumbers(`heroSwing`, { start: 0, end: 9, first: 0 }),
+            frameRate: 20,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: 'idle Rune',
+            frames: this.anims.generateFrameNumbers(`maleficientRune`, { start: 0, end: 0, first: 0 }),
+            frameRate: 0,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'damaged Rune',
+            frames: this.anims.generateFrameNumbers(`maleficientRune`, { start: 0, end: 5, first: 0 }),
+            frameRate: 20,
+            repeat: 0
+        });
+        this.anims.create({
+            key: 'lizard idle',
+            frames: this.anims.generateFrameNumbers(`lizardIdle`, { start: 0, end: 3, first: 0 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'wizard idle',
+            frames: this.anims.generateFrameNumbers(`wizardIdle`, { start: 0, end: 3, first: 0 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'merchant idle',
+            frames: this.anims.generateFrameNumbers(`merchantIdle`, { start: 0, end: 3, first: 0 }),
+            frameRate: 10,
+            repeat: -1
+        });
     }
 
 
