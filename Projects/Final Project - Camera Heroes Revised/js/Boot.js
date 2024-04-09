@@ -23,6 +23,7 @@ class Boot extends Phaser.Scene {
         this.load.setPath('assets/images/');
         this.load.image(`tiles`, `Game Sprite Sheet.png`);
         this.load.image(`tiles02`, `Level 2 Tilemap.png`);
+        this.load.image(`tiles03`, `Level 3 Tilemap.png`);
         this.load.image(`heroSword`, `Hero Sword.png`);
         this.load.image(`heroStaff`, `Hero Staff.png`);
         this.load.spritesheet(`maleficientRune`, `Maleficient Rune-sheet.png`, {
@@ -42,7 +43,7 @@ class Boot extends Phaser.Scene {
         });
         this.load.spritesheet(`merchantIdle`, `Merchant Idle.png`, {
             frameWidth: 16,
-            frameHeight: 28,
+            frameHeight: 23,
             endFrame: 3
         })
         this.load.spritesheet(`wizardIdle`, `Wizard Idle.png`, {
@@ -55,15 +56,15 @@ class Boot extends Phaser.Scene {
             frameHeight: 28,
             endFrame: 3
         })
+        this.load.spritesheet(`chestOpening`, `Chest opening.png`, {
+            frameWidth: 16,
+            frameHeight: 16,
+            endFrame: 2
+        })
         this.load.tilemapTiledJSON(`dungeon`, `Dungeon-01.tmj`)
         this.load.tilemapTiledJSON(`dungeon02`, `Dungeon-02.tmj`)
 
-        // NOTE: now that we're loading an actual file, we need to wait until everything
-        // loads before switching to the next scene. We use the "complete" event listener
-        // of the loader to do this.
-        // Note the use of an ARROW FUNCTION so that we can still use "this" correctly
-        // inside the event handler!
-        // EXAMPLE: https://phaser.io/examples/v3/view/loader/loader-events/load-progress
+        // Switches to the next scene
         this.load.on(`complete`, () => {
             // Switch to the Play scene
             this.scene.start(`TitleScreen`);
