@@ -145,10 +145,10 @@ class Level03 extends Phaser.Scene {
         const cam7 = this.cameras.add(100, 160, 100, 80);
         const cam8 = this.cameras.add(300, 0, 100, 160);
 
-        this.cameras.main.startFollow(this.avatar, 0.1, 0.1);
+        this.cameras.main.startFollow(this.avatar, 0.01, 0.01);
         cam2.startFollow(this.wizard, false, 0.1, 0.1);
         cam3.startFollow(this.chest1, false, 0.1, 0.1);
-        cam4.startFollow(this.avatar2, false, 0.1, 0.1);
+        cam4.startFollow(this.avatar2, false, 0.01, 0.01);
         cam5.startFollow(this.chest2, false, 0.1, 0.1);
         cam6.startFollow(this.chest3, false, 0.1, 0.1);
         cam7.startFollow(this.chest4, false, 0.1, 0.1);
@@ -463,7 +463,11 @@ class Level03 extends Phaser.Scene {
         }
     }
 
-    // Checks if the game end conditions have been met and if so switches the scene to the end screem
+    positionReset() {
+
+    }
+
+    // Checks if the game end conditions have been met and if so switches the scene to the end screen
     gameEnd() {
         if (this.maleficientRuneLifePoints < 0) {
             this.scene.start(`EndScreen`);
