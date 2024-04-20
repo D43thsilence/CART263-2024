@@ -258,7 +258,7 @@ class Level02 extends Phaser.Scene {
     gameEnd() {
         console.log(this.maleficientRuneLifePoints)
         if (this.maleficientRuneLifePoints < 0) {
-            this.scene.start(`EndScreen`);
+            this.scene.start(`Level03`);
         }
     }
 

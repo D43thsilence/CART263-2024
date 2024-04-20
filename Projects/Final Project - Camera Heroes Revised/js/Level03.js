@@ -21,6 +21,7 @@ class Level03 extends Phaser.Scene {
 
         // Creates all the player avatars and their collisions
         this.avatar = this.physics.add.sprite(1280, 270, `playerCharacter`);
+        // 1280, 270
         this.avatar.scale = 0.4;
         this.avatar.speed = 500;
         this.avatar.setMaxVelocity(130, 130);
@@ -71,9 +72,10 @@ class Level03 extends Phaser.Scene {
         this.physics.add.collider(this.maleficientRune, this.avatar2);
 
         // Creates and manages the collectable items and chests
-        this.heroSword = this.physics.add.sprite(100, 560, `heroSword`);
-        this.heroStaff = this.physics.add.sprite(1280, 370, `heroStaff`);
+        this.heroSword = this.physics.add.sprite(1512, 222, `heroSword`);
+        this.heroStaff = this.physics.add.sprite(1512, 361, `heroStaff`);
         this.chest1 = this.physics.add.sprite(414, 318, 'chestOpening')
+        this.chest1.setImmovable(true);
         this.physics.add.collider(this.chest1, this.avatar);
         this.physics.add.collider(this.chest1, this.avatar2);
 
@@ -96,15 +98,23 @@ class Level03 extends Phaser.Scene {
         // Sets up the various cameras in the game
         this.cameras.main.setSize(200, 160);
 
-        const cam2 = this.cameras.add(200, 0, 200, 160);
-        const cam3 = this.cameras.add(0, 160, 200, 160);
+        const cam2 = this.cameras.add(200, 0, 100, 160);
+        const cam3 = this.cameras.add(0, 160, 100, 80);
         const cam4 = this.cameras.add(200, 160, 200, 160);
+        const cam5 = this.cameras.add(0, 240, 100, 80);
+        const cam6 = this.cameras.add(100, 240, 100, 80);
+        const cam7 = this.cameras.add(100, 160, 100, 80);
+        const cam8 = this.cameras.add(300, 0, 100, 160);
 
         this.cameras.main.startFollow(this.avatar, 0.1, 0.1);
-
         cam2.startFollow(this.heroSword, false, 0.1, 0.1);
-        cam3.startFollow(this.avatar2, false, 0.1, 0.1);
-        cam4.startFollow(this.chest1, false, 0.1, 0.1);
+        cam3.startFollow(this.chest1, false, 0.1, 0.1);
+        cam4.startFollow(this.avatar2, false, 0.1, 0.1);
+        cam5.startFollow(this.chest1, false, 0.1, 0.1);
+        cam6.startFollow(this.chest1, false, 0.1, 0.1);
+        cam7.startFollow(this.chest1, false, 0.1, 0.1);
+        cam8.startFollow(this.merchant, false, 0.1, 0.1);
+
 
         // this.cameras.main.setBounds(0, 0, 800, 640);
         // cam2.setBounds(800, 0, 800, 640);
@@ -118,6 +128,13 @@ class Level03 extends Phaser.Scene {
 
         // Assigns the amount of life points the maleficient rune has
         this.maleficientRuneLifePoints = 100000
+
+        // Creates a style and constant for the text
+        let style3 = {
+            fontFamily: `sans-serif`,
+            fontSize: `10px`,
+            fill: `#ffffff`,
+        };
     }
 
     // Continuously checks for player input, the distance between the players and the Maleficient Rune and if the game end conditions are met
@@ -196,6 +213,11 @@ class Level03 extends Phaser.Scene {
                 this.avatar2.anims.play('avatar attack')
                 this.staffAttack()
                 this.avatar2.chain('idle animation');
+            }
+
+            // Allows player 2 to interact using the l key
+            else if (event.keyCode === 76) {
+                this.interaction()
             }
         });
 
