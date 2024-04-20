@@ -239,7 +239,6 @@ class Play extends Phaser.Scene {
 
     // Checks if the level end conditions have been met and if so switches the scene to the next level
     levelEnd() {
-        console.log(this.maleficientRuneLifePoints)
         if (this.maleficientRuneLifePoints < 0) {
             this.scene.start(`Level02`);
         }

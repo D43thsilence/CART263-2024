@@ -348,7 +348,7 @@ class Level03 extends Phaser.Scene {
             this.maleficientRune.chain('idle Rune');
         }
 
-        if (proximity[3] < attackRange) {
+        if (proximity[2] < attackRange) {
             this.lizard.destroy()
         }
 
@@ -465,7 +465,6 @@ class Level03 extends Phaser.Scene {
 
     // Checks if the game end conditions have been met and if so switches the scene to the end screem
     gameEnd() {
-        console.log(this.maleficientRuneLifePoints)
         if (this.maleficientRuneLifePoints < 0) {
             this.scene.start(`EndScreen`);
         }
