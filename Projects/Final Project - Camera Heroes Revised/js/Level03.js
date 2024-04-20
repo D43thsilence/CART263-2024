@@ -20,7 +20,7 @@ class Level03 extends Phaser.Scene {
         wallsLayer.setCollisionByProperty({ collides: true });
 
         // Creates all the player avatars and their collisions
-        this.avatar = this.physics.add.sprite(1280, 270, `playerCharacter`);
+        this.avatar = this.physics.add.sprite(1280, 350, `playerCharacter`);
         // 1280, 270
         this.avatar.scale = 0.4;
         this.avatar.speed = 500;
@@ -30,7 +30,7 @@ class Level03 extends Phaser.Scene {
         this.physics.add.collider(this.avatar, this.maleficientRune);
 
 
-        this.avatar2 = this.physics.add.sprite(1280, 350, `playerCharacter`);
+        this.avatar2 = this.physics.add.sprite(1280, 270, `playerCharacter`);
         this.avatar2.scale = 0.4;
         this.avatar2.speed = 500;
         this.avatar2.setMaxVelocity(130, 130);
@@ -44,8 +44,9 @@ class Level03 extends Phaser.Scene {
         this.staffPickup = false;
         this.merchantGone = false;
         this.wizardGone = false;
+        this.treasureCount = 0;
 
-        // Spawns a wizard and a merchant that block access to  the weapons the heroes need
+        // Spawns a wizard and a merchant that block access to the weapons the heroes need
         this.wizard = this.physics.add.sprite(1512, 180, `wizardIdle`);
         this.wizard.setImmovable(true);
         this.physics.add.collider(this.wizard, this.avatar);
@@ -56,11 +57,16 @@ class Level03 extends Phaser.Scene {
         this.physics.add.collider(this.merchant, this.avatar);
         this.physics.add.collider(this.merchant, this.avatar2);
 
-        // Spawns an enemy lizard that blocks access to one of the chests the heroes need to open
-        this.lizard = this.physics.add.sprite(71.5, 458, `lizardRunning`);
+        // Spawns enemy lizards that block access to two of the chests the heroes need to open
+        this.lizard = this.physics.add.sprite(760, 363, `lizardRunning`);
         this.lizard.setImmovable(true);
         this.physics.add.collider(this.lizard, this.avatar);
         this.physics.add.collider(this.lizard, this.avatar2);
+
+        // this.lizard2 = this.physics.add.sprite(1027, 448, `lizardRunning`);
+        // this.lizard2.setImmovable(true);
+        // this.physics.add.collider(this.lizard2, this.avatar);
+        // this.physics.add.collider(this.lizard2, this.avatar2);
 
         // Creates the Maleficient Rune
         this.maleficientRune = this.physics.add.sprite(1149, 276, `maleficientRune`);
@@ -74,10 +80,38 @@ class Level03 extends Phaser.Scene {
         // Creates and manages the collectable items and chests
         this.heroSword = this.physics.add.sprite(1512, 222, `heroSword`);
         this.heroStaff = this.physics.add.sprite(1512, 361, `heroStaff`);
+
         this.chest1 = this.physics.add.sprite(414, 318, 'chestOpening')
         this.chest1.setImmovable(true);
         this.physics.add.collider(this.chest1, this.avatar);
         this.physics.add.collider(this.chest1, this.avatar2);
+
+        this.chest2 = this.physics.add.sprite(733, 79, 'chestOpening')
+        this.chest2.setImmovable(true);
+        this.physics.add.collider(this.chest2, this.avatar);
+        this.physics.add.collider(this.chest2, this.avatar2);
+
+        this.chest3 = this.physics.add.sprite(232, 316, 'chestOpening')
+        this.chest3.setImmovable(true);
+        this.physics.add.collider(this.chest3, this.avatar);
+        this.physics.add.collider(this.chest3, this.avatar2);
+
+        this.chest4 = this.physics.add.sprite(137, 124, 'chestOpening')
+        this.chest4.setImmovable(true);
+        this.physics.add.collider(this.chest4, this.avatar);
+        this.physics.add.collider(this.chest4, this.avatar2);
+
+        this.chest5 = this.physics.add.sprite(760, 325, 'chestOpening')
+        this.chest5.setImmovable(true);
+        this.physics.add.collider(this.chest5, this.avatar);
+        this.physics.add.collider(this.chest5, this.avatar2);
+
+        this.chest6 = this.physics.add.sprite(895, 416, 'chestOpening')
+        this.chest6.setImmovable(true);
+        this.physics.add.collider(this.chest6, this.avatar);
+        this.physics.add.collider(this.chest6, this.avatar2);
+
+        // 733,79, 232,316, 137,124, 760,124, 760,363,  895,416, 1027,448
 
         // Allows the players to pick up their respective items
         this.physics.add.overlap(this.avatar, this.heroSword, this.collectSword, null, this);
@@ -107,12 +141,12 @@ class Level03 extends Phaser.Scene {
         const cam8 = this.cameras.add(300, 0, 100, 160);
 
         this.cameras.main.startFollow(this.avatar, 0.1, 0.1);
-        cam2.startFollow(this.heroSword, false, 0.1, 0.1);
+        cam2.startFollow(this.wizard, false, 0.1, 0.1);
         cam3.startFollow(this.chest1, false, 0.1, 0.1);
         cam4.startFollow(this.avatar2, false, 0.1, 0.1);
-        cam5.startFollow(this.chest1, false, 0.1, 0.1);
-        cam6.startFollow(this.chest1, false, 0.1, 0.1);
-        cam7.startFollow(this.chest1, false, 0.1, 0.1);
+        cam5.startFollow(this.chest2, false, 0.1, 0.1);
+        cam6.startFollow(this.chest3, false, 0.1, 0.1);
+        cam7.startFollow(this.chest4, false, 0.1, 0.1);
         cam8.startFollow(this.merchant, false, 0.1, 0.1);
 
 
@@ -142,6 +176,8 @@ class Level03 extends Phaser.Scene {
         this.handleInput();
         this.distanceCalculation()
         this.gameEnd();
+        this.cameraUpdate()
+        this.npcUpdate()
         console.log(this.avatar.x)
         console.log(this.avatar.y)
     }
@@ -281,7 +317,7 @@ class Level03 extends Phaser.Scene {
 
     // Allows both players to deal damage to the lizard and Maleficient Rune. Also plays the Rune's damage animation
     swordAttack() {
-        if (proximity[0] < attackRange | this.merchantGone === true) {
+        if (proximity[0] < attackRange && this.merchantGone === true && this.wizardGone === true) {
             this.maleficientRuneLifePoints = this.maleficientRuneLifePoints - 1
             this.maleficientRune.anims.play('damaged Rune')
             this.maleficientRune.chain('idle Rune');
@@ -294,7 +330,7 @@ class Level03 extends Phaser.Scene {
 
 
     staffAttack() {
-        if (proximity[1] < attackRange | this.wizardGone === true) {
+        if (proximity[1] < attackRange && this.merchantGone === true && this.wizardGone === true) {
             this.maleficientRuneLifePoints = this.maleficientRuneLifePoints - 1
             this.maleficientRune.anims.play('damaged Rune')
             this.maleficientRune.chain('idle Rune');
@@ -309,6 +345,25 @@ class Level03 extends Phaser.Scene {
         if (proximity[4] < attackRange) {
             this.chest1.anims.play('chest opening')
             setTimeout(() => this.chest1.destroy(), 2000);
+        }
+    }
+
+    cameraUpdate() {
+        if (this.treasureCount === 4) {
+            cam6.startFollow(this.chest5, false, 0.1, 0.1);
+            cam7.startFollow(this.chest6, false, 0.1, 0.1);
+        }
+    }
+
+    npcUpdate() {
+        if (this.treasureCount === 4) {
+            this.merchant.destroy()
+            this.merchantGone = true
+        }
+
+        else if (this.treasureCount === 6) {
+            this.wizard.destroy()
+            this.wizardGone = true
         }
     }
 
