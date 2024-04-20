@@ -358,6 +358,7 @@ class Level03 extends Phaser.Scene {
         }
     }
 
+    // Allows players to interact with the chests and increase their treasure count in order to acces their weapons
     interaction() {
         if (proximity[4] < attackRange) {
             this.chest1.anims.play('chest opening')
@@ -367,68 +368,72 @@ class Level03 extends Phaser.Scene {
         if (proximity[5] < attackRange) {
             this.chest1.anims.play('chest opening')
             setTimeout(() => this.chest1.destroy(), 2000);
+            setTimeout(() => this.treasureCount = this.treasureCount + 1, 2000)
         }
 
         if (proximity[6] < attackRange) {
             this.chest2.anims.play('chest opening')
             setTimeout(() => this.chest2.destroy(), 2000);
+            setTimeout(() => this.treasureCount = this.treasureCount + 1, 2000)
         }
         if (proximity[7] < attackRange) {
             this.chest2.anims.play('chest opening')
             setTimeout(() => this.chest2.destroy(), 2000);
+            setTimeout(() => this.treasureCount = this.treasureCount + 1, 2000)
         }
 
         if (proximity[8] < attackRange) {
             this.chest3.anims.play('chest opening')
             setTimeout(() => this.chest3.destroy(), 2000);
+            setTimeout(() => this.treasureCount = this.treasureCount + 1, 2000)
         }
         if (proximity[9] < attackRange) {
             this.chest3.anims.play('chest opening')
             setTimeout(() => this.chest3.destroy(), 2000);
+            setTimeout(() => this.treasureCount = this.treasureCount + 1, 2000)
         }
 
         if (proximity[10] < attackRange) {
             this.chest4.anims.play('chest opening')
             setTimeout(() => this.chest4.destroy(), 2000);
+            setTimeout(() => this.treasureCount = this.treasureCount + 1, 2000)
         }
         if (proximity[11] < attackRange) {
             this.chest4.anims.play('chest opening')
             setTimeout(() => this.chest4.destroy(), 2000);
+            setTimeout(() => this.treasureCount = this.treasureCount + 1, 2000)
         }
 
         if (proximity[12] < attackRange) {
             this.chest5.anims.play('chest opening')
             setTimeout(() => this.chest5.destroy(), 2000);
+            setTimeout(() => this.treasureCount = this.treasureCount + 1, 2000)
         }
         if (proximity[13] < attackRange) {
             this.chest5.anims.play('chest opening')
             setTimeout(() => this.chest5.destroy(), 2000);
+            setTimeout(() => this.treasureCount = this.treasureCount + 1, 2000)
         }
 
         if (proximity[14] < attackRange) {
             this.chest6.anims.play('chest opening')
             setTimeout(() => this.chest6.destroy(), 2000);
+            setTimeout(() => this.treasureCount = this.treasureCount + 1, 2000)
         }
         if (proximity[15] < attackRange) {
             this.chest6.anims.play('chest opening')
             setTimeout(() => this.chest6.destroy(), 2000);
-        }
-    }
-
-    cameraUpdate() {
-        if (this.treasureCount === 4) {
-            cam6.startFollow(this.chest5, false, 0.1, 0.1);
-            cam7.startFollow(this.chest6, false, 0.1, 0.1);
+            setTimeout(() => this.treasureCount = this.treasureCount + 1, 2000)
         }
     }
 
     npcUpdate() {
-        if (this.treasureCount >= 4) {
+        if (this.treasureCount >= 6000) {
             this.merchant.destroy()
             this.merchantGone = true
         }
 
-        if (this.treasureCount >= 6) {
+        if (this.treasureCount >= 9000) {
             this.wizard.destroy()
             this.wizardGone = true
         }
