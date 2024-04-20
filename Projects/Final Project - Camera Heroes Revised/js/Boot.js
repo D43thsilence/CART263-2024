@@ -63,6 +63,7 @@ class Boot extends Phaser.Scene {
         })
         this.load.tilemapTiledJSON(`dungeon`, `Dungeon-01.tmj`)
         this.load.tilemapTiledJSON(`dungeon02`, `Dungeon-02.tmj`)
+        this.load.tilemapTiledJSON(`dungeon03`, `Dungeon-03.tmj`)
 
         // Switches to the next scene
         this.load.on(`complete`, () => {

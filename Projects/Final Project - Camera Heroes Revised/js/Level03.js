@@ -8,10 +8,11 @@ class Level03 extends Phaser.Scene {
     create() {
 
         // Creates the stage where the game is played
-        const map = this.make.tilemap({ key: `dungeon02` });
-        const tileset = map.addTilesetImage(`Level 2 Tilemap`, `tiles02`);
-        const backgroundColorLayer = map.createLayer('Background Color', tileset, 0, 0);
-        const backgroundLayer = map.createLayer('Background', tileset, 0, 0);
+        const map = this.make.tilemap({ key: `dungeon03` });
+        const tileset = map.addTilesetImage(`Level 3 Tilemap`, `tiles03`);
+        const backgroundColorLayer = map.createLayer('Endless pit', tileset, 0, 0);
+        const backgroundLowerWalls = map.createLayer('Lower Walls Extra', tileset, 0, 0);
+        const backgroundWalls = map.createLayer('Lower walls', tileset, 0, 0);
         const groundLayer = map.createLayer('Floor', tileset, 0, 0);
         const wallsLayer = map.createLayer('Walls', tileset, 0, 0)
 
@@ -19,7 +20,7 @@ class Level03 extends Phaser.Scene {
         wallsLayer.setCollisionByProperty({ collides: true });
 
         // Creates all the player avatars and their collisions
-        this.avatar = this.physics.add.sprite(740, 400, `playerCharacter`);
+        this.avatar = this.physics.add.sprite(1280, 270, `playerCharacter`);
         this.avatar.scale = 0.4;
         this.avatar.speed = 500;
         this.avatar.setMaxVelocity(130, 130);
@@ -28,7 +29,7 @@ class Level03 extends Phaser.Scene {
         this.physics.add.collider(this.avatar, this.maleficientRune);
 
 
-        this.avatar2 = this.physics.add.sprite(860, 400, `playerCharacter`);
+        this.avatar2 = this.physics.add.sprite(1280, 350, `playerCharacter`);
         this.avatar2.scale = 0.4;
         this.avatar2.speed = 500;
         this.avatar2.setMaxVelocity(130, 130);
@@ -37,18 +38,21 @@ class Level03 extends Phaser.Scene {
         this.physics.add.collider(this.avatar2, this.maleficientRune);
 
 
-        // Resets the pickup variable for both players
+        // Resets all variables
         this.swordPickup = false;
         this.staffPickup = false;
+        this.merchantGone = false;
+        this.wizardGone = false;
 
         // Spawns an enemy lizard that blocks access to one of the weapons the heroes need
         this.lizard = this.physics.add.sprite(71.5, 458, `lizardRunning`);
-        this.physics.add.collider(this.lizards, this.avatar);
-        this.physics.add.collider(this.lizards, this.avatar2);
+        this.lizard.setImmovable(true);
+        this.physics.add.collider(this.lizard, this.avatar);
+        this.physics.add.collider(this.lizard, this.avatar2);
 
         // Creates the Maleficient Rune
-        this.maleficientRune = this.physics.add.sprite(800, 400, `maleficientRune`);
-        this.maleficientRune.scale = 0.9;
+        this.maleficientRune = this.physics.add.sprite(1149, 276, `maleficientRune`);
+        this.maleficientRune.scale = 0.8;
         // Adjusts the collision box of the Maleficient Rune
         this.maleficientRune.body.setSize(this.maleficientRune.width / 2, this.maleficientRune.height * 0.8)
         this.maleficientRune.setImmovable(true);
@@ -58,6 +62,7 @@ class Level03 extends Phaser.Scene {
         // Creates and manages the collectable items
         this.heroSword = this.physics.add.sprite(100, 560, `heroSword`);
         this.heroStaff = this.physics.add.sprite(1280, 370, `heroStaff`);
+        this.chest1 = this.physics.add.sprite(414, 318, 'chestOpening')
 
         // Allows the players to pick up their respective items
         this.physics.add.overlap(this.avatar, this.heroSword, this.collectSword, null, this);
@@ -83,7 +88,7 @@ class Level03 extends Phaser.Scene {
 
         cam2.startFollow(this.heroSword, false, 0.1, 0.1);
         cam3.startFollow(this.avatar2, false, 0.1, 0.1);
-        cam4.startFollow(this.heroStaff, false, 0.1, 0.1);
+        cam4.startFollow(this.chest1, false, 0.1, 0.1);
 
         // this.cameras.main.setBounds(0, 0, 800, 640);
         // cam2.setBounds(800, 0, 800, 640);
@@ -104,6 +109,8 @@ class Level03 extends Phaser.Scene {
         this.handleInput();
         this.distanceCalculation()
         this.gameEnd();
+        console.log(this.avatar.x)
+        console.log(this.avatar.y)
     }
 
     // Removes the items after the player has collected them
@@ -224,33 +231,39 @@ class Level03 extends Phaser.Scene {
         // Determines the distance between the player, the lizard and the Maleficient Rune
         proximity[0] = dist(this.avatar.x, this.avatar.y, this.maleficientRune.x, this.maleficientRune.y);
         proximity[1] = dist(this.avatar2.x, this.avatar2.y, this.maleficientRune.x, this.maleficientRune.y);
-        // proximity[2] = dist(this.avatar.x, this.avatar.y, this.lizard.x, this.lizard.y);
-        // proximity[3] = dist(this.avatar2.x, this.avatar2.y, this.lizard.x, this.lizard.y);
+        proximity[2] = dist(this.avatar.x, this.avatar.y, this.lizard.x, this.lizard.y);
+        proximity[3] = dist(this.avatar2.x, this.avatar2.y, this.lizard.x, this.lizard.y);
+        proximity[4] = dist(this.avatar1.x, this.avatar1.y, this.chest1.x, this.chest1.y);
     }
 
     // Allows both players to deal damage to the lizard and Maleficient Rune. Also plays the Rune's damage animation
     swordAttack() {
-        if (proximity[0] < attackRange) {
+        if (proximity[0] < attackRange | this.merchantGone === true) {
             this.maleficientRuneLifePoints = this.maleficientRuneLifePoints - 1
             this.maleficientRune.anims.play('damaged Rune')
             this.maleficientRune.chain('idle Rune');
         }
 
         else if (proximity[3] < attackRange) {
-            // this.lizard.destroy()
+            this.lizard.destroy()
         }
     }
 
+
     staffAttack() {
-        if (proximity[1] < attackRange) {
+        if (proximity[1] < attackRange | this.wizardGone === true) {
             this.maleficientRuneLifePoints = this.maleficientRuneLifePoints - 1
             this.maleficientRune.anims.play('damaged Rune')
             this.maleficientRune.chain('idle Rune');
         }
 
         else if (proximity[3] < attackRange) {
-            // this.lizard.destroy()
+            this.lizard.destroy()
         }
+    }
+
+    interaction() {
+
     }
 
     // Checks if the game end conditions have been met and if so switches the scene to the end screem
