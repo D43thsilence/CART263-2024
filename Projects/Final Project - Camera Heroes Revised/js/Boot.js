@@ -132,6 +132,20 @@ class Boot extends Phaser.Scene {
             frameRate: 10,
             repeat: -1
         });
+
+        this.anims.create({
+            key: 'closed chest',
+            frames: this.anims.generateFrameNumbers(`chestOpening`, { start: 0, end: 0, first: 0 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'chest opening',
+            frames: this.anims.generateFrameNumbers(`chestOpening`, { start: 0, end: 2, first: 0 }),
+            frameRate: 10,
+            repeat: 0
+        });
     }
 
 
