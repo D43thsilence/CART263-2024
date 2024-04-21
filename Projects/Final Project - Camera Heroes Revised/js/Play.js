@@ -220,9 +220,9 @@ class Play extends Phaser.Scene {
         proximity.distance2 = dist(this.avatar2.x, this.avatar2.y, this.maleficientRune.x, this.maleficientRune.y);
     }
 
-    // Allows both players to deal damage to the Maleficient Rune. Also plays the Rune's damage animation
+    // Allows both players to deal damage to the Maleficient Rune if both weapons have been acquired. Also plays the Rune's damage animation
     swordAttack() {
-        if (proximity.distance1 < attackRange) {
+        if (proximity.distance1 < attackRange && this.swordPickup === true && this.staffPickup === true) {
             this.maleficientRuneLifePoints = this.maleficientRuneLifePoints - 1;
             this.maleficientRune.anims.play('damaged Rune');
             this.maleficientRune.chain('idle Rune');
@@ -230,7 +230,7 @@ class Play extends Phaser.Scene {
     }
 
     staffAttack() {
-        if (proximity.distance2 < attackRange) {
+        if (proximity.distance2 < attackRange && this.swordPickup === true && this.staffPickup === true) {
             this.maleficientRuneLifePoints = this.maleficientRuneLifePoints - 1;
             this.maleficientRune.anims.play('damaged Rune');
             this.maleficientRune.chain('idle Rune');

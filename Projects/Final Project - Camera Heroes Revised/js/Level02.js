@@ -42,7 +42,7 @@ class Level02 extends Phaser.Scene {
         this.staffPickup = false;
 
         // Spawns an enemy lizard that blocks access to one of the weapons the heroes need
-        this.lizard = this.physics.add.sprite(71.5, 458, `lizardRunning`);
+        this.lizard = this.physics.add.sprite(71.5, 458, `lizardIdle`);
         this.lizard.setImmovable(true);
         this.physics.add.collider(this.lizard, this.avatar);
         this.physics.add.collider(this.lizard, this.avatar2);
@@ -229,9 +229,9 @@ class Level02 extends Phaser.Scene {
         proximity[3] = dist(this.avatar2.x, this.avatar2.y, this.lizard.x, this.lizard.y);
     }
 
-    // Allows both players to deal damage to the lizard and Maleficient Rune. Also plays the Rune's damage animation
+    // Allows both players to deal damage to the lizard and Maleficient Rune if both weapons have been acquired. Also plays the Rune's damage animation
     swordAttack() {
-        if (proximity[0] < attackRange) {
+        if (proximity[0] < attackRange && this.swordPickup === true && this.staffPickup === true) {
             this.maleficientRuneLifePoints = this.maleficientRuneLifePoints - 1
             this.maleficientRune.anims.play('damaged Rune')
             this.maleficientRune.chain('idle Rune');
@@ -243,7 +243,7 @@ class Level02 extends Phaser.Scene {
     }
 
     staffAttack() {
-        if (proximity[1] < attackRange) {
+        if (proximity[1] < attackRange && this.swordPickup === true && this.staffPickup === true) {
             this.maleficientRuneLifePoints = this.maleficientRuneLifePoints - 1
             this.maleficientRune.anims.play('damaged Rune')
             this.maleficientRune.chain('idle Rune');

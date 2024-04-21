@@ -64,13 +64,14 @@ class Level03 extends Phaser.Scene {
         this.physics.add.collider(this.merchant, this.avatar2);
 
         // Spawns enemy lizards that block access to two of the chests the heroes need to open
-        this.lizard = this.physics.add.sprite(760, 363, `lizardRunning`);
+        this.lizard = this.physics.add.sprite(760, 363, `lizardIdle`);
         this.lizard.setImmovable(true);
         this.physics.add.collider(this.lizard, this.avatar);
         this.physics.add.collider(this.lizard, this.avatar2);
 
-        this.lizard2 = this.physics.add.sprite(1027, 443, `lizardRunning`);
+        this.lizard2 = this.physics.add.sprite(1027, 443, `lizardIdle`);
         this.lizard2.setImmovable(true);
+        this.lizard2.scale = 1.4;
         this.physics.add.collider(this.lizard2, this.avatar);
         this.physics.add.collider(this.lizard2, this.avatar2);
 
@@ -167,13 +168,6 @@ class Level03 extends Phaser.Scene {
 
         // Assigns the amount of life points the maleficient rune has
         this.maleficientRuneLifePoints = 100000
-
-        // Creates a style and constant for the text
-        let style3 = {
-            fontFamily: `sans-serif`,
-            fontSize: `10px`,
-            fill: `#ffffff`,
-        };
     }
 
     // Continuously checks for player input, the distance between the players and the Maleficient Rune and if the game end conditions are met
@@ -340,9 +334,9 @@ class Level03 extends Phaser.Scene {
         proximity[17] = dist(this.avatar2.x, this.avatar2.y, this.lizard2.x, this.lizard2.y);
     }
 
-    // Allows both players to deal damage to the lizard and Maleficient Rune. Also plays the Rune's damage animation
+    // Allows both players to deal damage to the lizards and Maleficient Rune if both the merchant and the wizard are gone. Also plays the Rune's damage animation
     swordAttack() {
-        if (proximity[0] < attackRange && this.merchantGone === true && this.wizardGone === true) {
+        if (proximity[0] < attackRange && this.merchantGone === true && this.wizardGone === true && this.swordPickup === true && this.staffPickup === true) {
             this.maleficientRuneLifePoints = this.maleficientRuneLifePoints - 1
             this.maleficientRune.anims.play('damaged Rune')
             this.maleficientRune.chain('idle Rune');
@@ -359,7 +353,7 @@ class Level03 extends Phaser.Scene {
 
 
     staffAttack() {
-        if (proximity[1] < attackRange && this.merchantGone === true && this.wizardGone === true) {
+        if (proximity[1] < attackRange && this.merchantGone === true && this.wizardGone === true && this.swordPickup === true && this.staffPickup === true) {
             this.maleficientRuneLifePoints = this.maleficientRuneLifePoints - 1
             this.maleficientRune.anims.play('damaged Rune')
             this.maleficientRune.chain('idle Rune');
