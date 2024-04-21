@@ -75,7 +75,6 @@ class Level02 extends Phaser.Scene {
 
         // Sets up the various cameras in the game
         this.cameras.main.setSize(200, 160);
-
         const cam2 = this.cameras.add(200, 0, 200, 160);
         const cam3 = this.cameras.add(0, 160, 200, 160);
         const cam4 = this.cameras.add(200, 160, 200, 160);
@@ -86,10 +85,8 @@ class Level02 extends Phaser.Scene {
         cam3.startFollow(this.avatar2, false, 0.1, 0.1);
         cam4.startFollow(this.heroStaff, false, 0.1, 0.1);
 
-        // this.cameras.main.setBounds(0, 0, 800, 640);
-        // cam2.setBounds(800, 0, 800, 640);
-        // cam3.setBounds(0, 0, 800, 640);
-        // cam4.setBounds(800, 0, 800, 640);
+        this.cameras.main.setBounds(0, 0, 1600, 640);
+        cam3.setBounds(0, 0, 1600, 640);
 
         // Sets the bounds of the world
         this.physics.world.setBounds(0, 0, 800 * 2, 640);

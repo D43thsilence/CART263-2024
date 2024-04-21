@@ -155,11 +155,8 @@ class Level03 extends Phaser.Scene {
         cam7.startFollow(this.chest4, false, 0.1, 0.1);
         cam8.startFollow(this.merchant, false, 0.1, 0.1);
 
-
-        // this.cameras.main.setBounds(0, 0, 800, 640);
-        // cam2.setBounds(800, 0, 800, 640);
-        // cam3.setBounds(0, 0, 800, 640);
-        // cam4.setBounds(800, 0, 800, 640);
+        this.cameras.main.setBounds(0, 0, 1600, 640);
+        cam4.setBounds(0, 0, 1600, 640);
 
         // Sets the bounds of the world
         this.physics.world.setBounds(0, 0, 800 * 2, 640);
