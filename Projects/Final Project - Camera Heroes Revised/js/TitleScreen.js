@@ -32,6 +32,9 @@ class TitleScreen extends Phaser.Scene {
             fill: `#ffffff`,
         };
 
+        // Adds the background of the title screen
+        this.add.sprite(200, 160, `titleScreen`)
+
         // Creates text strings used in the title screen
         let gameDescription = `Camera Heroes!`;
         let gameInstructions = `Use the WASD keys and the arrow keys to move both characters.`;
@@ -42,7 +45,7 @@ class TitleScreen extends Phaser.Scene {
         let startInstruction = `Click to start!`;
 
         // Draws the text on the Title Screen
-        this.gameText = this.add.text(width / 1.8, height / 2, gameDescription, style);
+        this.gameText = this.add.text(width / 1.8, height / 2.6, gameDescription, style);
         this.gameText = this.add.text(width / 1.9, height / 0.7, gameInstructions, style3);
         this.gameText = this.add.text(width / 4, height / 0.59, gameInstructions4, style4);
         this.gameText = this.add.text(width / 2.2, height / 0.52, gameInstructions2, style3);

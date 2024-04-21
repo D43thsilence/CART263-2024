@@ -21,6 +21,7 @@ class Boot extends Phaser.Scene {
 
         // Loads the images
         this.load.setPath('assets/images/');
+        this.load.image(`titleScreen`, `Title Screen background.png`);
         this.load.image(`tiles`, `Game Sprite Sheet.png`);
         this.load.image(`tiles02`, `Level 2 Tilemap.png`);
         this.load.image(`tiles03`, `Level 3 Tilemap.png`);
